@@ -7,8 +7,12 @@
   <groupId>guru.springframework</groupId>
   <artifactId>apifirst-sb-server</artifactId>
   <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>apifirst-api</module>
+    </modules>
 
-  <properties>
+    <properties>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
