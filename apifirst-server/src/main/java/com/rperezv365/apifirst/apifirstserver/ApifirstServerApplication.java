@@ -1,4 +1,4 @@
-package com.rperezv365.apifirst.apifirst_server;
+package com.rperezv365.apifirst.apifirstserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
