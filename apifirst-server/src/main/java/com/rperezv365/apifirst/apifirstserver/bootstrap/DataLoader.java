@@ -1,14 +1,17 @@
 package com.rperezv365.apifirst.apifirstserver.bootstrap;
 
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.model.Address;
 import com.rperezv365.apifirst.model.Customer;
 import com.rperezv365.apifirst.model.Name;
 import com.rperezv365.apifirst.model.PaymentMethod;
-import java.time.OffsetDateTime;
-import java.util.List;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * DataLoader
@@ -20,18 +23,14 @@ import org.springframework.stereotype.Component;
  * @since 1.17
  */
 @Component
+@RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
     private final CustomerRepository customerRepository;
 
-    DataLoader(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
-
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Loading Customer Data");
-
 
         Address address1 = Address.builder()
                 .addressLine1("1234 W Some Street")
@@ -50,7 +49,7 @@ public class DataLoader implements CommandLineRunner {
                 .email("john@springframework.guru")
                 .phone("800-555-1212")
                 .paymentMethods(List.of(PaymentMethod.builder()
-                                .displayName("My Card")
+                        .displayName("My Card")
                         .cardNumber(12341234)
                         .expiryMonth(12)
                         .expiryYear(26)

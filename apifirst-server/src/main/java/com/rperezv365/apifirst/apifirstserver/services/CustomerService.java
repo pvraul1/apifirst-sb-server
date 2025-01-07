@@ -2,6 +2,7 @@ package com.rperezv365.apifirst.apifirstserver.services;
 
 import com.rperezv365.apifirst.model.Customer;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * CustomerService
@@ -16,4 +17,5 @@ public interface CustomerService {
 
     List<Customer> listCustomers();
 
+    Customer getCustomerById(UUID customerId);
 }

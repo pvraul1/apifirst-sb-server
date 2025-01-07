@@ -30,3 +30,6 @@ replay_pid*
 # DS_Store
 *.DS_Store
 apifirst-api/target
+*.project
+*.classpath
+.settings/

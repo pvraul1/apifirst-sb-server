@@ -26,7 +26,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     private final Map<UUID, Customer> entityMap = new HashMap<>();
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <S extends Customer> S save(S entity) {
         UUID id = UUID.randomUUID();
 
