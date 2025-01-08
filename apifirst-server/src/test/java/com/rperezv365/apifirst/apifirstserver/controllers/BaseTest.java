@@ -4,6 +4,7 @@ import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import com.rperezv365.apifirst.model.Customer;
+import com.rperezv365.apifirst.model.Product;
 import jakarta.servlet.Filter;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class BaseTest {
     public MockMvc mockMvc;
 
     Customer testCustomer;
+    Product testProduct;
 
     @BeforeEach
     void setUp() {
@@ -48,6 +50,7 @@ public class BaseTest {
                 .build();
 
         testCustomer = customerRepository.findAll().iterator().next();
+        testProduct = productRepository.findAll().iterator().next();
     }
 
 }
