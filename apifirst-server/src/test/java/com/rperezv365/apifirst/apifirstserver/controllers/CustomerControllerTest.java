@@ -22,6 +22,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 public class CustomerControllerTest extends BaseTest {
 
+    @DisplayName("Test get customer by id")
+    @Test
+    void testGetCustomerById() throws Exception {
+        super.mockMvc.perform(get(CustomerController.BASE_URL + "/" + super.testCustomer.getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(super.testCustomer.getId().toString()));
+    }
+
     @DisplayName("Test list customers")
     @Test
     void testListCustomers() throws Exception {

@@ -3,6 +3,7 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
+import com.rperezv365.apifirst.model.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,10 +35,13 @@ public class BaseTest {
 
     public MockMvc mockMvc;
 
+    Customer testCustomer;
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
+        testCustomer = customerRepository.findAll().iterator().next();
+    }
 
 }
