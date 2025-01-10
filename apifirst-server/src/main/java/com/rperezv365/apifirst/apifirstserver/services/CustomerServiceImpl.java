@@ -35,4 +35,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
+    @Override
+    public Customer saveNewCustomer(final Customer customer) {
+        return customerRepository.save(customer);
+    }
+
 }

@@ -297,6 +297,7 @@ components:
           description: The unique identifier of the customer.
           example: 123e4567-e89b-12d3-a456-426614174000
           readOnly: true
+          nullable: true
         addressLine1:
           type: string
           description: The first line of the customer's address.
@@ -345,6 +346,7 @@ components:
           format: uuid
           description: The unique identifier of the payment method.
           readOnly: true
+          nullable: true
         displayName:
           type: string
           description: The display name of the payment method.
@@ -386,6 +388,7 @@ components:
           description: The unique identifier of the customer.
           example: 123e4567-e89b-12d3-a456-426614174000
           readOnly: true
+          nullable: true
         name:
           $ref: '#/components/schemas/name'
         shipToAddress:
@@ -408,6 +411,7 @@ components:
           nullable: true
         paymentMethods:
           type: array
+          nullable: true
           description: The payment methods of the customer.
           items:
             $ref: '#/components/schemas/payment_method'

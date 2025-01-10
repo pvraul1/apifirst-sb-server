@@ -1,19 +1,19 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rperezv365.apifirst.apifirstserver.services.CustomerService;
 import com.rperezv365.apifirst.model.Customer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * CustomerController
@@ -33,6 +33,18 @@ public class CustomerController {
     public static final String BASE_URL = "/v1/customers";
 
     private final CustomerService customerService;
+
+    @PostMapping
+    public ResponseEntity<Void> saveNewCustomer(@RequestBody final Customer customer) {
+        log.info("Creating customer (in controller) called with param: {}", customer);
+
+        Customer savedCustomer = customerService.saveNewCustomer(customer);
+
+        UriComponents uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{customer_id}")
+                .buildAndExpand(savedCustomer.getId());
+
+        return ResponseEntity.created(URI.create(uriComponents.getPath())).build();
+    }
 
     @GetMapping
     public ResponseEntity<List<Customer>> listCustomers() {
