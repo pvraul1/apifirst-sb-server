@@ -10,4 +10,5 @@ public interface ProductService {
 
     Product getProductById(UUID productId);
 
+    Product saveNewProduct(Product product);
 }

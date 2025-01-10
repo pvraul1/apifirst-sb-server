@@ -123,6 +123,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Problem'
+    post:
+      tags:
+        - Product
+      summary: Create a new product.
+      description: Creates a new product.
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '201':
+          description: Product created.
+          headers:
+            Location:
+              description: The location of the created product.
+              schema:
+                type: string
+                format: uri
+                example: /v1/products/123e4567-e89b-12d3-a456-426614174000
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /v1/products/{productId}:
     get:
       tags:
@@ -260,6 +287,7 @@ components:
       example: '2022-08-22T11:43:06-07:00'
       title: ISO Timestamp
       readOnly: true
+      nullable: true
     address:
       type: object
       properties:
@@ -467,6 +495,7 @@ components:
           format: uuid
           description: The unique identifier of the category.
           readOnly: true
+          nullable: true
         category:
           type: string
           description: The category of the product.
@@ -494,6 +523,7 @@ components:
           format: uuid
           description: The unique identifier of the image.
           readOnly: true
+          nullable: true
         url:
           type: string
           format: url
@@ -521,6 +551,7 @@ components:
           format: uuid
           description: The unique identifier for a product.
           readOnly: true
+          nullable: true
         description:
           type: string
           description: A description of the product.

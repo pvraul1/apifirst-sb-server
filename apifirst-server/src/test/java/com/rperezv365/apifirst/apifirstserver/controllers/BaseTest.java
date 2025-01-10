@@ -1,17 +1,20 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import com.rperezv365.apifirst.model.Customer;
 import com.rperezv365.apifirst.model.Order;
 import com.rperezv365.apifirst.model.Product;
+
 import jakarta.servlet.Filter;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  * BaseTest
@@ -38,6 +41,9 @@ public class BaseTest {
 
     @Autowired
     Filter validationFilter;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     public MockMvc mockMvc;
 
