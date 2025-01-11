@@ -11,12 +11,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 /**
- * Product
+ * Category
  * <p>
  * Created by IntelliJ, Spring Framework Guru.
  *
  * @author architecture - pvraul
- * @version 11/01/2025 - 17:17
+ * @version 11/01/2025 - 17:55
  * @since 1.17
  */
 @Entity
@@ -25,7 +25,7 @@ import org.hibernate.type.SqlTypes;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,19 +33,11 @@ public class Product {
     @Column(length = 36, columnDefinition = "CHAR(36)", updatable = false, nullable = false)
     private UUID id;
 
+    private String category;
     private String description;
 
-    @Embedded
-    private Dimension dimensions;
-
-    @ManyToMany(mappedBy = "products")
-    private List<Category> categories;
-
-    @OneToMany(mappedBy = "product")
-    private List<Image> images;
-
-    private String price;
-    private String cost;
+    @ManyToMany(mappedBy = "categories")
+    private List<Product> products;
 
     @CreationTimestamp
     private OffsetDateTime dateCreated;
