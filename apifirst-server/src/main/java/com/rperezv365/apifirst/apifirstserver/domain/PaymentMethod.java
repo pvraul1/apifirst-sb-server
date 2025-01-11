@@ -2,19 +2,18 @@ package com.rperezv365.apifirst.apifirstserver.domain;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 /**
- * Customer
+ * PaymentMethod
  * <p>
  * Created by IntelliJ, Spring Framework Guru.
  *
  * @author architecture - pvraul
- * @version 11/01/2025 - 15:56
+ * @version 11/01/2025 - 16:54
  * @since 1.17
  */
 @Entity
@@ -23,7 +22,7 @@ import org.hibernate.type.SqlTypes;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer {
+public class PaymentMethod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,22 +30,14 @@ public class Customer {
     @Column(length = 36, columnDefinition = "CHAR(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @Embedded
-    private Name name;
+    @ManyToOne
+    private Customer customer;
 
-    @OneToOne
-    private Address shipToAddress;
-
-    @OneToOne
-    private Address billToAddress;
-
-    private String email;
-    private String phone;
-
-    @OneToMany(mappedBy = "customer")
-    private List<PaymentMethod> paymentMethods;
-
+    private String displayName;
+    private Integer cardNumber;
+    private Integer expiryMonth;
+    private Integer expiryYear;
+    private Integer cvv;
     private OffsetDateTime dateCreated;
     private OffsetDateTime dateUpdated;
-
 }
