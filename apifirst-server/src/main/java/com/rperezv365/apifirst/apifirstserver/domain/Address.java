@@ -1,18 +1,19 @@
 package com.rperezv365.apifirst.apifirstserver.domain;
 
 import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 /**
- * Customer
+ * Address
  * <p>
  * Created by IntelliJ, Spring Framework Guru.
  *
  * @author architecture - pvraul
- * @version 11/01/2025 - 15:56
+ * @version 11/01/2025 - 16:44
  * @since 1.17
  */
 @Entity
@@ -21,7 +22,7 @@ import org.hibernate.type.SqlTypes;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,15 +30,12 @@ public class Customer {
     @Column(length = 36, columnDefinition = "CHAR(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @Embedded
-    private Name name;
+    private String addressLine1;
+    private String addressLine2;
+    private String city;
+    private String state;
+    private String zip;
+    private OffsetDateTime dateCreated;
+    private OffsetDateTime dateUpdated;
 
-    @OneToOne
-    private Address shipToAddress;
-
-    @OneToOne
-    private Address billToAddress;
-
-    private String email;
-    private String phone;
 }
