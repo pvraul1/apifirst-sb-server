@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 /**
@@ -38,6 +40,11 @@ public class PaymentMethod {
     private Integer expiryMonth;
     private Integer expiryYear;
     private Integer cvv;
+
+    @CreationTimestamp
     private OffsetDateTime dateCreated;
+
+    @UpdateTimestamp
     private OffsetDateTime dateUpdated;
+
 }

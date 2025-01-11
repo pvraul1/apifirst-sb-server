@@ -5,7 +5,9 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 /**
@@ -46,7 +48,10 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<PaymentMethod> paymentMethods;
 
+    @CreationTimestamp
     private OffsetDateTime dateCreated;
+
+    @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 
 }
