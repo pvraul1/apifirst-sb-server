@@ -198,6 +198,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Problem'
+    post:
+      tags:
+        - Order
+      summary: Create a new order.
+      description: Create a new order.
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order_create'
+      responses:
+        '201':
+          description: Order created.
+          headers:
+            Location:
+              description: The location of the created order.
+              schema:
+                type: string
+                format: uri
+                example: /v1/orders/123e4567-e89b-12d3-a456-426614174000
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /v1/orders/{orderId}:
     get:
       tags:
@@ -692,3 +719,38 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/order'
+    order_line_create:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+          description: The unique identifier of the product.
+        orderQuantity:
+          type: integer
+          description: The quantity of the product in the order.
+          minimum: 1
+          maximum: 100
+          example: 2
+      required:
+        - productId
+        - orderQuantity
+    order_create:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: The unique identifier of the customer.
+        selectPaymentMethod:
+          type: string
+          format: uuid
+          nullable: true
+        orderLines:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/order_line_create'
+          description: The order lines of the order
+      required:
+        - customerId

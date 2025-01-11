@@ -2,15 +2,16 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.services.OrderService;
 import com.rperezv365.apifirst.model.Order;
+import com.rperezv365.apifirst.model.OrderCreate;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * OrderController
@@ -30,6 +31,18 @@ public class OrderController {
     public static final String BASE_URL = "/v1/orders";
 
     private final OrderService orderService;
+
+    @PostMapping
+    public ResponseEntity<Void> createOrder(@RequestBody final OrderCreate orderCreate) {
+        log.info("Creating order (in controller) called with param: {}", orderCreate);
+
+        Order savedOrder = orderService.createOrder(orderCreate);
+
+        UriComponents uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{orderId}")
+                .buildAndExpand(savedOrder.getId());
+
+        return ResponseEntity.created(URI.create(uriComponents.toUriString())).build();
+    }
 
     @GetMapping
     public ResponseEntity<List<Order>> listOrders() {
