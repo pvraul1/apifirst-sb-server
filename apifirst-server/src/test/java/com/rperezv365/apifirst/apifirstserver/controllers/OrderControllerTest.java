@@ -3,14 +3,13 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Collections;
 
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
@@ -18,10 +17,8 @@ import com.rperezv365.apifirst.model.OrderCreate;
 import com.rperezv365.apifirst.model.OrderLineCreate;
 
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
 class OrderControllerTest extends BaseTest {
 
-    @Order(1)
     @Test
     void listOrders() throws Exception {
         super.mockMvc.perform(get(OrderController.BASE_URL)
@@ -30,7 +27,6 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.size()", greaterThan(0)));
     }
 
-    @Order(2)
     @Test
     void getOrderById() throws Exception {
         assert super.testOrder.getId() != null;
