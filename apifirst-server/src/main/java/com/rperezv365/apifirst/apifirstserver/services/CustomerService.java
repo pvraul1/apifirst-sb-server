@@ -1,6 +1,6 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
-import com.rperezv365.apifirst.model.Customer;
+import com.rperezv365.apifirst.model.CustomerDto;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,9 +15,9 @@ import java.util.UUID;
  */
 public interface CustomerService {
 
-    List<Customer> listCustomers();
+    List<CustomerDto> listCustomers();
 
-    Customer getCustomerById(UUID customerId);
+    CustomerDto getCustomerById(UUID customerId);
 
-    Customer saveNewCustomer(Customer customer);
+    CustomerDto saveNewCustomer(CustomerDto customer);
 }

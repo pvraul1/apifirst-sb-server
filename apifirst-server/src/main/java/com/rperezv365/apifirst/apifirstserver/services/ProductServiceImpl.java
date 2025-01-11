@@ -1,7 +1,7 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
-import com.rperezv365.apifirst.model.Product;
+import com.rperezv365.apifirst.model.ProductDto;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
@@ -24,19 +24,19 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Product> listProducts() {
+    public List<ProductDto> listProducts() {
         return StreamSupport.stream(productRepository.findAll().spliterator(), false)
                 .toList();
     }
 
     @Override
-    public Product getProductById(final UUID productId) {
+    public ProductDto getProductById(final UUID productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override
-    public Product saveNewProduct(final Product product) {
+    public ProductDto saveNewProduct(final ProductDto product) {
         return productRepository.save(product);
     }
 

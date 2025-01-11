@@ -1,20 +1,16 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.rperezv365.apifirst.model.OrderCreateDto;
+import com.rperezv365.apifirst.model.OrderLineCreateDto;
 import java.util.Collections;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import com.rperezv365.apifirst.model.OrderCreate;
-import com.rperezv365.apifirst.model.OrderLineCreate;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 class OrderControllerTest extends BaseTest {
@@ -39,10 +35,10 @@ class OrderControllerTest extends BaseTest {
     @Test
     void testCreateOrder() throws Exception {
         assert testCustomer.getPaymentMethods() != null;
-        OrderCreate orderCreate = OrderCreate.builder()
+        OrderCreateDto orderCreate = OrderCreateDto.builder()
                 .customerId(testCustomer.getId())
                 .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
-                .orderLines(Collections.singletonList(OrderLineCreate.builder()
+                .orderLines(Collections.singletonList(OrderLineCreateDto.builder()
                         .productId(testProduct.getId())
                         .orderQuantity(1)
                         .build()))

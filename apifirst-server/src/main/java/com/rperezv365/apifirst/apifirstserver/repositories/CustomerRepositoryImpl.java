@@ -1,8 +1,8 @@
 package com.rperezv365.apifirst.apifirstserver.repositories;
 
-import com.rperezv365.apifirst.model.Address;
-import com.rperezv365.apifirst.model.Customer;
-import com.rperezv365.apifirst.model.PaymentMethod;
+import com.rperezv365.apifirst.model.AddressDto;
+import com.rperezv365.apifirst.model.CustomerDto;
+import com.rperezv365.apifirst.model.PaymentMethodDto;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,19 +24,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository {
 
-    private final Map<UUID, Customer> entityMap = new HashMap<>();
+    private final Map<UUID, CustomerDto> entityMap = new HashMap<>();
 
     @SuppressWarnings("unchecked")
 	@Override
-    public <S extends Customer> S save(S entity) {
+    public <S extends CustomerDto> S save(S entity) {
         UUID id = UUID.randomUUID();
 
-        Customer.CustomerBuilder builder1 = Customer.builder();
+        CustomerDto.CustomerDtoBuilder builder1 = CustomerDto.builder();
 
         builder1.id(id);
 
-        if (entity.getBillToAddress() != null){
-            builder1.billToAddress(Address.builder()
+        if (entity.getBillToAddress() != null) {
+            builder1.billToAddress(AddressDto.builder()
                     .id(UUID.randomUUID())
                     .addressLine1(entity.getBillToAddress().getAddressLine1())
                     .addressLine2(entity.getBillToAddress().getAddressLine2())
@@ -49,7 +49,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
 
         if (entity.getShipToAddress() != null) {
-            builder1.shipToAddress(Address.builder()
+            builder1.shipToAddress(AddressDto.builder()
                     .id(UUID.randomUUID())
                     .addressLine1(entity.getShipToAddress().getAddressLine1())
                     .addressLine2(entity.getShipToAddress().getAddressLine2())
@@ -64,7 +64,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         if (entity.getPaymentMethods() != null && !entity.getPaymentMethods().isEmpty()) {
             builder1.paymentMethods(entity.getPaymentMethods()
                     .stream()
-                    .map(paymentMethod -> PaymentMethod.builder()
+                    .map(paymentMethod -> PaymentMethodDto.builder()
                             .id(UUID.randomUUID())
                             .displayName(paymentMethod.getDisplayName())
                             .cardNumber(paymentMethod.getCardNumber())
@@ -77,7 +77,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                     .collect(Collectors.toList()));
         }
 
-        Customer customer = builder1.email(entity.getEmail())
+        CustomerDto customer = builder1.email(entity.getEmail())
                 .name(entity.getName())
                 .phone(entity.getPhone())
                 .dateCreated(OffsetDateTime.now())
@@ -90,14 +90,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public <S extends Customer> Iterable<S> saveAll(Iterable<S> entities) {
+    public <S extends CustomerDto> Iterable<S> saveAll(Iterable<S> entities) {
         return StreamSupport.stream(entities.spliterator(), false)
                 .map(this::save)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Customer> findById(UUID uuid) {
+    public Optional<CustomerDto> findById(UUID uuid) {
         return Optional.of(entityMap.get(uuid));
     }
 
@@ -107,12 +107,12 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Iterable<Customer> findAll() {
+    public Iterable<CustomerDto> findAll() {
         return entityMap.values();
     }
 
     @Override
-    public Iterable<Customer> findAllById(Iterable<UUID> uuids) {
+    public Iterable<CustomerDto> findAllById(Iterable<UUID> uuids) {
         return StreamSupport.stream(uuids.spliterator(), false)
                 .map(this::findById)
                 .filter(Optional::isPresent)
@@ -131,7 +131,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public void delete(Customer entity) {
+    public void delete(CustomerDto entity) {
         entityMap.remove(entity.getId());
     }
 
@@ -141,7 +141,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Customer> entities) {
+    public void deleteAll(Iterable<? extends CustomerDto> entities) {
         entities.forEach(this::delete);
     }
 

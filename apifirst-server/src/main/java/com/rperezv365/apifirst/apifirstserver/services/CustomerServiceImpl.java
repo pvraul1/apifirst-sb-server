@@ -1,7 +1,7 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
-import com.rperezv365.apifirst.model.Customer;
+import com.rperezv365.apifirst.model.CustomerDto;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
@@ -24,19 +24,19 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public List<Customer> listCustomers() {
+    public List<CustomerDto> listCustomers() {
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
                 .toList();
     }
 
     @Override
-    public Customer getCustomerById(final UUID customerId) {
+    public CustomerDto getCustomerById(final UUID customerId) {
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
     @Override
-    public Customer saveNewCustomer(final Customer customer) {
+    public CustomerDto saveNewCustomer(final CustomerDto customer) {
         return customerRepository.save(customer);
     }
 

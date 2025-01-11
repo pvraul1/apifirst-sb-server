@@ -1,16 +1,16 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
-import com.rperezv365.apifirst.model.Address;
-import com.rperezv365.apifirst.model.Customer;
-import com.rperezv365.apifirst.model.Name;
+import com.rperezv365.apifirst.model.AddressDto;
+import com.rperezv365.apifirst.model.CustomerDto;
+import com.rperezv365.apifirst.model.NameDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import static org.hamcrest.Matchers.greaterThan;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -28,6 +28,7 @@ public class CustomerControllerTest extends BaseTest {
     @DisplayName("Test get customer by id")
     @Test
     void testGetCustomerById() throws Exception {
+        assert super.testCustomer.getId() != null;
         super.mockMvc.perform(get(CustomerController.BASE_URL + "/" + super.testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -48,20 +49,20 @@ public class CustomerControllerTest extends BaseTest {
     @DisplayName("Test Create Customer")
     @Test
     void testCreateCustomer() throws Exception {
-        Customer customer = Customer.builder()
-                .name(Name.builder()
+        CustomerDto customer = CustomerDto.builder()
+                .name(NameDto.builder()
                         .lastName("Doe")
                         .firstName("John")
                         .build())
                 .phone("555-555-5555")
                 .email("john@example.com")
-                .shipToAddress(Address.builder()
+                .shipToAddress(AddressDto.builder()
                         .addressLine1("123 Main St")
                         .city("Denver")
                         .state("CO")
                         .zip("80216")
                         .build())
-                .billToAddress(Address.builder()
+                .billToAddress(AddressDto.builder()
                         .addressLine1("123 Main St")
                         .city("Denver")
                         .state("CO")

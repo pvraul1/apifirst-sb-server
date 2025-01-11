@@ -1,15 +1,15 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
-import com.rperezv365.apifirst.model.Order;
-import com.rperezv365.apifirst.model.OrderCreate;
+import com.rperezv365.apifirst.model.OrderCreateDto;
+import com.rperezv365.apifirst.model.OrderDto;
 import java.util.List;
 import java.util.UUID;
 
 public interface OrderService {
 
-    List<Order> listOrders();
+    List<OrderDto> listOrders();
 
-    Order getOrderById(UUID orderId);
+    OrderDto getOrderById(UUID orderId);
 
-    Order createOrder(OrderCreate orderCreate);
+    OrderDto createOrder(OrderCreateDto orderCreate);
 }

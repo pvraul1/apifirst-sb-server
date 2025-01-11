@@ -1,14 +1,15 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
-import com.rperezv365.apifirst.model.Product;
+import com.rperezv365.apifirst.model.ProductDto;
 import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
 
-    List<Product> listProducts();
+    List<ProductDto> listProducts();
 
-    Product getProductById(UUID productId);
+    ProductDto getProductById(UUID productId);
 
-    Product saveNewProduct(Product product);
+    ProductDto saveNewProduct(ProductDto product);
+
 }

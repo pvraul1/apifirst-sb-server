@@ -1,9 +1,10 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.services.ProductService;
-import com.rperezv365.apifirst.model.Product;
+import com.rperezv365.apifirst.model.ProductDto;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,26 +33,26 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Void> saveNewProduct(@RequestBody final Product product) {
+    public ResponseEntity<Void> saveNewProduct(@RequestBody final ProductDto product) {
         log.info("Creating product (in controller) called with param: {}", product);
 
-        Product savedProduct = productService.saveNewProduct(product);
+        ProductDto savedProduct = productService.saveNewProduct(product);
 
         UriComponents uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{product_id}")
                 .buildAndExpand(savedProduct.getId());
 
-        return ResponseEntity.created(URI.create(uriComponents.getPath())).build();
+        return ResponseEntity.created(URI.create(Objects.requireNonNull(uriComponents.getPath()))).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> listProducts() {
+    public ResponseEntity<List<ProductDto>> listProducts() {
         log.info("Listing products (in controller) called!");
 
         return ResponseEntity.ok(productService.listProducts());
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable("productId") final UUID productId) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("productId") final UUID productId) {
         log.info("Getting product by id (in controller) called with param: {}", productId);
 
         return ResponseEntity.ok(productService.getProductById(productId));

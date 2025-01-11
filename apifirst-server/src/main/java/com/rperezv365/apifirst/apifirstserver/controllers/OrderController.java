@@ -1,8 +1,8 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.services.OrderService;
-import com.rperezv365.apifirst.model.Order;
-import com.rperezv365.apifirst.model.OrderCreate;
+import com.rperezv365.apifirst.model.OrderCreateDto;
+import com.rperezv365.apifirst.model.OrderDto;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -33,10 +33,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Void> createOrder(@RequestBody final OrderCreate orderCreate) {
+    public ResponseEntity<Void> createOrder(@RequestBody final OrderCreateDto orderCreate) {
         log.info("Creating order (in controller) called with param: {}", orderCreate);
 
-        Order savedOrder = orderService.createOrder(orderCreate);
+        OrderDto savedOrder = orderService.createOrder(orderCreate);
 
         UriComponents uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{orderId}")
                 .buildAndExpand(savedOrder.getId());
@@ -45,14 +45,14 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> listOrders() {
+    public ResponseEntity<List<OrderDto>> listOrders() {
         log.info("Listing orders (in controller) called!");
 
         return ResponseEntity.ok(orderService.listOrders());
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrderById(@PathVariable("orderId") final UUID orderId) {
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable("orderId") final UUID orderId) {
         log.info("Getting order by id (in controller) called with param: {}", orderId);
 
         return ResponseEntity.ok(orderService.getOrderById(orderId));

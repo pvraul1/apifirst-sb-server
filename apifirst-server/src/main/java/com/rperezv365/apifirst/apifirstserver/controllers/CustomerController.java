@@ -1,17 +1,15 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
+import com.rperezv365.apifirst.apifirstserver.services.CustomerService;
+import com.rperezv365.apifirst.model.CustomerDto;
 import java.net.URI;
 import java.util.List;
-
+import java.util.Objects;
 import java.util.UUID;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.rperezv365.apifirst.apifirstserver.services.CustomerService;
-import com.rperezv365.apifirst.model.Customer;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -35,26 +33,26 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<Void> saveNewCustomer(@RequestBody final Customer customer) {
+    public ResponseEntity<Void> saveNewCustomer(@RequestBody final CustomerDto customer) {
         log.info("Creating customer (in controller) called with param: {}", customer);
 
-        Customer savedCustomer = customerService.saveNewCustomer(customer);
+        CustomerDto savedCustomer = customerService.saveNewCustomer(customer);
 
         UriComponents uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{customer_id}")
                 .buildAndExpand(savedCustomer.getId());
 
-        return ResponseEntity.created(URI.create(uriComponents.getPath())).build();
+        return ResponseEntity.created(URI.create(Objects.requireNonNull(uriComponents.getPath()))).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> listCustomers() {
+    public ResponseEntity<List<CustomerDto>> listCustomers() {
         log.info("Listing customers (in controller) called!");
 
         return ResponseEntity.ok(customerService.listCustomers());
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") final UUID customerId) {
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customerId") final UUID customerId) {
         log.info("Getting customer by id (in controller) called with param: {}", customerId);
 
         return ResponseEntity.ok(customerService.getCustomerById(customerId));

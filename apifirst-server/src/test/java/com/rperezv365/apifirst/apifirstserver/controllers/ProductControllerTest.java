@@ -1,22 +1,18 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-
+import com.rperezv365.apifirst.model.CategoryDto;
+import com.rperezv365.apifirst.model.DimensionsDto;
+import com.rperezv365.apifirst.model.ImageDto;
+import com.rperezv365.apifirst.model.ProductDto;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import com.rperezv365.apifirst.model.Category;
-import com.rperezv365.apifirst.model.Dimensions;
-import com.rperezv365.apifirst.model.Image;
-import com.rperezv365.apifirst.model.Product;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 class ProductControllerTest extends BaseTest{
@@ -31,6 +27,7 @@ class ProductControllerTest extends BaseTest{
 
     @Test
     void getProductById() throws Exception {
+        assert super.testProduct.getId() != null;
         super.mockMvc.perform(get(ProductController.BASE_URL + "/" + super.testProduct.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -39,19 +36,19 @@ class ProductControllerTest extends BaseTest{
 
     @Test
     void testCreateProduct() throws Exception {
-        Product newProduct = Product.builder()
+        ProductDto newProduct = ProductDto.builder()
                 .description("New Product")
                 .cost("5.00")
                 .price("8.95")
-                .categories(Arrays.asList(Category.builder()
+                .categories(Collections.singletonList(CategoryDto.builder()
                         .category("New Category")
                         .description("New Category Description")
                         .build()))
-                .images(Arrays.asList(Image.builder()
+                .images(Collections.singletonList(ImageDto.builder()
                         .url("http://example.com/image.jpg")
                         .altText("Image Alt Text")
                         .build()))
-                .dimensions(Dimensions.builder()
+                .dimensions(DimensionsDto.builder()
                         .length(10)
                         .width(10)
                         .height(10)
