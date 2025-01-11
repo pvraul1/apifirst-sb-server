@@ -492,7 +492,7 @@ components:
             A URI reference that identifies the specific occurrence of the
             problem.  It may or may not yield further information if
             dereferenced.
-    dimentions:
+    dimensions:
       type: object
       properties:
         length:
@@ -588,8 +588,8 @@ components:
           description: A description of the product.
           minLength: 3
           maxLength: 255
-        dimentions:
-          $ref: '#/components/schemas/dimentions'
+        dimensions:
+          $ref: '#/components/schemas/dimensions'
         categories:
           type: array
           items:
@@ -744,7 +744,7 @@ components:
           type: string
           format: uuid
           description: The unique identifier of the customer.
-        selectPaymentMethod:
+        selectPaymentMethodId:
           type: string
           format: uuid
           nullable: true

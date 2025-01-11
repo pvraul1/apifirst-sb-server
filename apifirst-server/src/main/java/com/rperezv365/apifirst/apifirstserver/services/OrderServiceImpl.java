@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
                                 .filter(paymentMethod -> {
                                     assert paymentMethod.getId() != null;
                                     return paymentMethod.getId()
-                                            .equals(orderCreate.getSelectPaymentMethod());
+                                            .equals(orderCreate.getSelectPaymentMethodId());
                                 })
                                 .findFirst().orElseThrow())
                         .build())

@@ -41,7 +41,7 @@ class OrderControllerTest extends BaseTest {
         assert testCustomer.getPaymentMethods() != null;
         OrderCreate orderCreate = OrderCreate.builder()
                 .customerId(testCustomer.getId())
-                .selectPaymentMethod(testCustomer.getPaymentMethods().get(0).getId())
+                .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
                 .orderLines(Collections.singletonList(OrderLineCreate.builder()
                         .productId(testProduct.getId())
                         .orderQuantity(1)

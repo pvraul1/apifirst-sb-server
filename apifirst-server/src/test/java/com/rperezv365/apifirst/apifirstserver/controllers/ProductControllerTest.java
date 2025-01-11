@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import com.rperezv365.apifirst.model.Category;
-import com.rperezv365.apifirst.model.Dimentions;
+import com.rperezv365.apifirst.model.Dimensions;
 import com.rperezv365.apifirst.model.Image;
 import com.rperezv365.apifirst.model.Product;
 
@@ -51,7 +51,7 @@ class ProductControllerTest extends BaseTest{
                         .url("http://example.com/image.jpg")
                         .altText("Image Alt Text")
                         .build()))
-                .dimentions(Dimentions.builder()
+                .dimensions(Dimensions.builder()
                         .length(10)
                         .width(10)
                         .height(10)

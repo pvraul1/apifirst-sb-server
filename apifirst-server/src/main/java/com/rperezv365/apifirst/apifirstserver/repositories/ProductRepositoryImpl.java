@@ -11,7 +11,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Repository;
 
 import com.rperezv365.apifirst.model.Category;
-import com.rperezv365.apifirst.model.Dimentions;
+import com.rperezv365.apifirst.model.Dimensions;
 import com.rperezv365.apifirst.model.Image;
 import com.rperezv365.apifirst.model.Product;
 
@@ -69,11 +69,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .collect(Collectors.toList()));
         }
 
-        if (entity.getDimentions() != null) {
-            builder.dimentions(Dimentions.builder()
-                    .length(entity.getDimentions().getLength())
-                    .width(entity.getDimentions().getWidth())
-                    .height(entity.getDimentions().getHeight())
+        if (entity.getDimensions() != null) {
+            builder.dimensions(Dimensions.builder()
+                    .length(entity.getDimensions().getLength())
+                    .width(entity.getDimensions().getWidth())
+                    .height(entity.getDimensions().getHeight())
                     .build());
         }
 
