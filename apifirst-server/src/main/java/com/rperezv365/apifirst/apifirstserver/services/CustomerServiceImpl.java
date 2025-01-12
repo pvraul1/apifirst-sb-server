@@ -1,5 +1,6 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
+import com.rperezv365.apifirst.apifirstserver.mappers.CustomerMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.model.CustomerDto;
 import java.util.List;
@@ -23,21 +24,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
 
+    private final CustomerMapper customerMapper;
+
     @Override
     public List<CustomerDto> listCustomers() {
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+                .map(customerMapper::customerToCustomerDto)
                 .toList();
     }
 
     @Override
     public CustomerDto getCustomerById(final UUID customerId) {
-        return customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return customerMapper.customerToCustomerDto(customerRepository
+                .findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found")));
     }
 
     @Override
     public CustomerDto saveNewCustomer(final CustomerDto customer) {
-        return customerRepository.save(customer);
+        return customerMapper.customerToCustomerDto(customerRepository.save(customerMapper.customerDtoToCustomer(customer)));
     }
 
 }

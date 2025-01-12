@@ -31,6 +31,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        /*
         System.out.println("Loading Customer Data");
 
 
@@ -200,6 +201,7 @@ public class DataLoader implements CommandLineRunner {
 
         orderRepository.save(order1);
         orderRepository.save(order2);
+         */
     }
 
 }

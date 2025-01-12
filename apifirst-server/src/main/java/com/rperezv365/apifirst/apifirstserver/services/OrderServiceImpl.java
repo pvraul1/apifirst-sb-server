@@ -30,18 +30,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> listOrders() {
+        /*
         return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
-                .toList();
+                .toList();*/
+        return null;
     }
 
     @Override
     public OrderDto getOrderById(final UUID orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+        /*return orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));*/
+        return null;
     }
 
     @Override
     public OrderDto createOrder(final OrderCreateDto orderCreate) {
+        /*
         CustomerDto orderCustomer = customerRepository.findById(orderCreate.getCustomerId()).orElseThrow();
 
         assert orderCustomer.getPaymentMethods() != null;
@@ -79,7 +83,8 @@ public class OrderServiceImpl implements OrderService {
                             .build());
                 });
 
-        return orderRepository.save(builder.orderLines(orderLines).build());
+        return orderRepository.save(builder.orderLines(orderLines).build());*/
+        return null;
     }
 
 }
