@@ -1,16 +1,14 @@
 package com.rperezv365.apifirst.apifirstserver.bootstrap;
 
+import com.rperezv365.apifirst.apifirstserver.domain.*;
+import com.rperezv365.apifirst.apifirstserver.repositories.CategoryRepository;
+import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
-import com.rperezv365.apifirst.model.*;
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * DataLoader
@@ -28,22 +26,38 @@ public class DataLoader implements CommandLineRunner {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        /*
-        System.out.println("Loading Customer Data");
 
+        Category electronics = categoryRepository.save(Category.builder()
+                .category("Electronics")
+                .description("Electronics")
+                .categoryCode("ELECTRONICS")
+                .build());
 
-        AddressDto address1 = AddressDto.builder()
+        Category clothing = categoryRepository.save(Category.builder()
+                .category("Clothing")
+                .description("Clothing")
+                .categoryCode("CLOTHING")
+                .build());
+
+        Category dryGoods = categoryRepository.save(Category.builder()
+                .category("Dry Goods")
+                .description("Dry Goods")
+                .categoryCode("DRYGOODS")
+                .build());
+
+        Address address1 = Address.builder()
                 .addressLine1("1234 W Some Street")
                 .city("Some City")
                 .state("FL")
                 .zip("33701")
                 .build();
 
-        CustomerDto customer1 = CustomerDto.builder()
-                .name(NameDto.builder()
+        Customer customer1 = Customer.builder()
+                .name(Name.builder()
                         .firstName("John")
                         .lastName("Thompson")
                         .build())
@@ -51,7 +65,7 @@ public class DataLoader implements CommandLineRunner {
                 .shipToAddress(address1)
                 .email("john@springframework.guru")
                 .phone("800-555-1212")
-                .paymentMethods(List.of(PaymentMethodDto.builder()
+                .paymentMethods(List.of(PaymentMethod.builder()
                         .displayName("My Card")
                         .cardNumber(12341234)
                         .expiryMonth(12)
@@ -60,15 +74,15 @@ public class DataLoader implements CommandLineRunner {
                         .build()))
                 .build();
 
-        AddressDto address2 = AddressDto.builder()
+        Address address2 = Address.builder()
                 .addressLine1("1234 W Some Street")
                 .city("Some City")
                 .state("FL")
                 .zip("33701")
                 .build();
 
-        CustomerDto customer2 = CustomerDto.builder()
-                .name(NameDto.builder()
+        Customer customer2 = Customer.builder()
+                .name(Name.builder()
                         .firstName("Jim")
                         .lastName("Smith")
                         .build())
@@ -76,7 +90,7 @@ public class DataLoader implements CommandLineRunner {
                 .shipToAddress(address2)
                 .email("jim@springframework.guru")
                 .phone("800-555-1212")
-                .paymentMethods(List.of(PaymentMethodDto.builder()
+                .paymentMethods(List.of(PaymentMethod.builder()
                         .displayName("My Other Card")
                         .cardNumber(1234888)
                         .expiryMonth(12)
@@ -85,115 +99,71 @@ public class DataLoader implements CommandLineRunner {
                         .build()))
                 .build();
 
-        CustomerDto savedCustomer1 = customerRepository.save(customer1);
-        CustomerDto savedCustomer2 = customerRepository.save(customer2);
+        Customer savedCustomer1 = customerRepository.save(customer1);
+        Customer savedCustomer2 = customerRepository.save(customer2);
 
-        ProductDto product1 = ProductDto.builder()
+        Product product1 = Product.builder()
                 .description("Product 1")
-                .categories(List.of(CategoryDto.builder()
-                        .category("Category 1")
-                        .description("Category 1 Description")
-                        .build()))
+                .categories(List.of(dryGoods))
                 .cost("12.99")
                 .price("14.99")
-                .dimensions(DimensionsDto.builder()
+                .dimensions(Dimension.builder()
                         .height(1)
                         .length(2)
                         .width(3)
                         .build())
-                .images(List.of(ImageDto.builder()
+                .images(List.of(Image.builder()
                         .url("http://example.com/image1")
                         .altText("Image 1")
                         .build()))
                 .build();
 
-        ProductDto product2 = ProductDto.builder()
+        Product product2 = Product.builder()
                 .description("Product 2")
-                .categories(List.of(CategoryDto.builder()
-                        .category("Category 2")
-                        .description("Category 2 Description")
-                        .build()))
+                .categories(List.of(electronics))
                 .cost("12.99")
                 .price("14.99")
-                .dimensions(DimensionsDto.builder()
+                .dimensions(Dimension.builder()
                         .height(1)
                         .length(2)
                         .width(3)
                         .build())
-                .images(List.of(ImageDto.builder()
+                .images(List.of(Image.builder()
                         .url("http://example.com/image2")
                         .altText("Image 2")
                         .build()))
                 .build();
 
-        ProductDto savedProduct1 = productRepository.save(product1);
-        ProductDto savedProduct2 = productRepository.save(product2);
+        Product savedProduct1 = productRepository.save(product1);
+        Product savedProduct2 = productRepository.save(product2);
 
-        assert savedCustomer1.getPaymentMethods() != null;
-        OrderDto order1 = OrderDto.builder()
-                .customer(OrderCustomerDto.builder()
-                        .id(savedCustomer1.getId())
-                        .name(NameDto.builder()
-                                .firstName(savedCustomer1.getName().getFirstName())
-                                .lastName(savedCustomer1.getName().getLastName())
-                                .build())
-                        .billToAddress(savedCustomer1.getBillToAddress())
-                        .shipToAddress(savedCustomer1.getShipToAddress())
-                        .phone(savedCustomer1.getPhone())
-                        .selectedPaymentMethod(savedCustomer1.getPaymentMethods().get(0))
-                        .build())
-                .orderStatus(OrderDto.OrderStatusEnum.NEW)
+        Order order1 = Order.builder()
+                .customer(savedCustomer1)
+                .orderStatus(OrderStatusEnum.NEW)
                 .shipmentInfo("shipment info")
-                .orderLines(List.of(OrderLineDto.builder()
-                                .product(OrderProductDto.builder()
-                                        .id(savedProduct1.getId())
-                                        .description(product1.getDescription())
-                                        .price(product1.getPrice())
-                                        .build())
+                .orderLines(List.of(OrderLine.builder()
+                                .product(product1)
                                 .orderQuantity(1)
                                 .shipQuantity(1)
                                 .build(),
-                        OrderLineDto.builder()
-                                .product(OrderProductDto.builder()
-                                        .id(savedProduct2.getId())
-                                        .description(product2.getDescription())
-                                        .price(product1.getPrice())
-                                        .build())
+                        OrderLine.builder()
+                                .product(savedProduct1)
                                 .orderQuantity(1)
                                 .shipQuantity(1)
                                 .build()))
                 .build();
 
-        assert savedCustomer2.getPaymentMethods() != null;
-        OrderDto order2 = OrderDto.builder()
-                .customer(OrderCustomerDto.builder()
-                        .id(savedCustomer2.getId())
-                        .name(NameDto.builder()
-                                .firstName(savedCustomer2.getName().getFirstName())
-                                .lastName(savedCustomer2.getName().getLastName())
-                                .build())
-                        .billToAddress(savedCustomer2.getBillToAddress())
-                        .shipToAddress(savedCustomer2.getShipToAddress())
-                        .phone(savedCustomer2.getPhone())
-                        .selectedPaymentMethod(savedCustomer2.getPaymentMethods().get(0))
-                        .build())
-                .orderStatus(OrderDto.OrderStatusEnum.NEW)
+        Order order2 = Order.builder()
+                .customer(savedCustomer2)
+                .orderStatus(OrderStatusEnum.NEW)
                 .shipmentInfo("shipment info #2")
-                .orderLines(List.of(OrderLineDto.builder()
-                                .product(OrderProductDto.builder()
-                                        .id(savedProduct1.getId())
-                                        .description(product1.getDescription())
-                                        .price(product1.getPrice())
-                                        .build())
+                .orderLines(List.of(OrderLine.builder()
+                                .product(savedProduct2)
                                 .orderQuantity(1)
                                 .shipQuantity(1)
                                 .build(),
-                        OrderLineDto.builder()
-                                .product(OrderProductDto.builder()
-                                        .id(savedProduct2.getId())
-                                        .description(product2.getDescription())
-                                        .price(product1.getPrice())
-                                        .build())
+                        OrderLine.builder()
+                                .product(product2)
                                 .orderQuantity(1)
                                 .shipQuantity(1)
                                 .build()))
@@ -201,7 +171,6 @@ public class DataLoader implements CommandLineRunner {
 
         orderRepository.save(order1);
         orderRepository.save(order2);
-         */
     }
 
 }

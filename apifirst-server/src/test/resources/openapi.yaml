@@ -133,7 +133,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/product'
+              $ref: '#/components/schemas/product_create'
       responses:
         '201':
           description: Product created.
@@ -251,6 +251,32 @@ paths:
           description: Bad Request.
         '404':
           description: Order not found.
+  /v1/categories:
+    get:
+      tags:
+        - Products
+      summary: List all categories.
+      description: List categories.
+      operationId: listCategories
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category_list'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
 security:
   - basic_auth: []
 components:
@@ -539,6 +565,12 @@ components:
           minLength: 3
           maxLength: 255
           example: Electronics and gadgets
+        category_code:
+          type: string
+          description: The category code of the product.
+          minLength: 3
+          maxLength: 25
+          example: ELECTRONIC
         dateCreated:
           $ref: '#/components/schemas/iso_timestamp'
         dateUpdated:
@@ -615,6 +647,34 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/product'
+    product_create:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the product.
+          minLength: 3
+          maxLength: 255
+        dimensions:
+          $ref: '#/components/schemas/dimensions'
+        categories:
+          type: array
+          description: The categories codes for the product.
+          items:
+            type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        price:
+          type: string
+          pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
+        cost:
+          type: string
+          pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
+      required:
+        - description
+        - price
     order_customer:
       type: object
       properties:
@@ -756,3 +816,7 @@ components:
           description: The order lines of the order
       required:
         - customerId
+    category_list:
+      type: array
+      items:
+        $ref: '#/components/schemas/category'

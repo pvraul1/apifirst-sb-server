@@ -34,6 +34,7 @@ public class Category {
 
     private String category;
     private String description;
+    private String categoryCode;
 
     @ManyToMany(mappedBy = "categories")
     private List<Product> products;
