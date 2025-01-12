@@ -1,6 +1,5 @@
 package com.rperezv365.apifirst.apifirstserver.domain;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 /**
@@ -12,7 +11,6 @@ import lombok.*;
  * @version 11/01/2025 - 16:37
  * @since 1.17
  */
-@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor

@@ -27,6 +27,7 @@ import org.hibernate.type.SqlTypes;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "order_header") // order is a reserved word in SQL
 public class Order {
 
     @Id

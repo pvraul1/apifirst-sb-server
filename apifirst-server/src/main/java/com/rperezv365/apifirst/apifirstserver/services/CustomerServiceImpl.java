@@ -1,5 +1,6 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
+import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.apifirstserver.mappers.CustomerMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.model.CustomerDto;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CustomerServiceImpl
@@ -28,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDto> listCustomers() {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+        return customerRepository.findAll().stream()
                 .map(customerMapper::customerToCustomerDto)
                 .toList();
     }
@@ -40,9 +42,13 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found")));
     }
 
+    @Transactional
     @Override
     public CustomerDto saveNewCustomer(final CustomerDto customer) {
-        return customerMapper.customerToCustomerDto(customerRepository.save(customerMapper.customerDtoToCustomer(customer)));
+        Customer savedCustomer = customerRepository.save(customerMapper.customerDtoToCustomer(customer));
+        customerRepository.flush();
+
+        return customerMapper.customerToCustomerDto(savedCustomer);
     }
 
 }

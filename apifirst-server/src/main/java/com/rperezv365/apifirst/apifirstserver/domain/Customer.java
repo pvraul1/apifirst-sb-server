@@ -1,14 +1,15 @@
 package com.rperezv365.apifirst.apifirstserver.domain;
 
 import jakarta.persistence.*;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Customer
@@ -19,34 +20,41 @@ import org.hibernate.type.SqlTypes;
  * @version 11/01/2025 - 15:56
  * @since 1.17
  */
-@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "CHAR(36)", updatable = false, nullable = false)
+    @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address shipToAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address billToAddress;
 
     @Embedded
     private Name name;
 
-    @OneToOne
-    private Address shipToAddress;
-
-    @OneToOne
-    private Address billToAddress;
-
     private String email;
     private String phone;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<PaymentMethod> paymentMethods;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.paymentMethods != null && !this.paymentMethods.isEmpty()) {
+            this.paymentMethods.forEach(paymentMethod -> paymentMethod.setCustomer(this));
+        }
+    }
 
     @CreationTimestamp
     private OffsetDateTime dateCreated;

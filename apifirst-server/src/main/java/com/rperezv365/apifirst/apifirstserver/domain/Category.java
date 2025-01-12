@@ -19,18 +19,17 @@ import org.hibernate.type.SqlTypes;
  * @version 11/01/2025 - 17:55
  * @since 1.17
  */
-@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
 public class Category {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "CHAR(36)", updatable = false, nullable = false)
+    @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
 
     private String category;
@@ -44,4 +43,5 @@ public class Category {
 
     @UpdateTimestamp
     private OffsetDateTime dateUpdated;
+
 }
