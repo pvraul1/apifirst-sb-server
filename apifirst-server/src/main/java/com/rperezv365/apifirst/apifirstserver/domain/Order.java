@@ -39,6 +39,9 @@ public class Order {
     @ManyToOne
     private Customer customer;
 
+    @ManyToOne
+    private PaymentMethod selectedPaymentMethod;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
@@ -46,7 +49,7 @@ public class Order {
     private String shipmentInfo;
 
     @Builder.Default
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> orderLines = new ArrayList<>();
 
     @CreationTimestamp

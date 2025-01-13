@@ -6,6 +6,7 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,6 +34,7 @@ class OrderControllerTest extends BaseTest {
     }
 
     @Test
+    @Transactional
     void testCreateOrder() throws Exception {
         assert testCustomer.getPaymentMethods() != null;
         OrderCreateDto orderCreate = OrderCreateDto.builder()
