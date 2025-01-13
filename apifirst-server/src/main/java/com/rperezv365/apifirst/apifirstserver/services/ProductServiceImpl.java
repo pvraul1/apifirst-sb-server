@@ -27,16 +27,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> listProducts() {
-        /*return StreamSupport.stream(productRepository.findAll().spliterator(), false)
-                .toList();*/
-        return null;
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::productToProductDto)
+                .toList();
     }
 
     @Override
     public ProductDto getProductById(final UUID productId) {
-        /*return productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));*/
-        return null;
+        return productRepository.findById(productId)
+                .map(productMapper::productToProductDto)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override
