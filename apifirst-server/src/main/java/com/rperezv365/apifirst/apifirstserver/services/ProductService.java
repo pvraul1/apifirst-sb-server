@@ -1,5 +1,6 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
+import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,6 @@ public interface ProductService {
 
     ProductDto getProductById(UUID productId);
 
-    ProductDto saveNewProduct(ProductDto product);
+    ProductDto saveNewProduct(ProductCreateDto product);
 
 }

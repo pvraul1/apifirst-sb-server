@@ -1,10 +1,11 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
+import com.rperezv365.apifirst.apifirstserver.mappers.ProductMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
+import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     @Override
     public List<ProductDto> listProducts() {
@@ -38,9 +40,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto saveNewProduct(final ProductDto product) {
-        // return productRepository.save(product);
-        return null;
+    public ProductDto saveNewProduct(final ProductCreateDto product) {
+        return productMapper.productToProductDto(productRepository.save(productMapper.productCreateDtoToProduct(product)));
     }
 
 }

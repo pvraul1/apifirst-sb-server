@@ -1,6 +1,7 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.services.ProductService;
+import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
 import java.net.URI;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Void> saveNewProduct(@RequestBody final ProductDto product) {
+    public ResponseEntity<Void> saveNewProduct(@RequestBody final ProductCreateDto product) {
         log.info("Creating product (in controller) called with param: {}", product);
 
         ProductDto savedProduct = productService.saveNewProduct(product);

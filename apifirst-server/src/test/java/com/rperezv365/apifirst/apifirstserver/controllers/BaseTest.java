@@ -1,12 +1,12 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rperezv365.apifirst.apifirstserver.domain.Customer;
+import com.rperezv365.apifirst.apifirstserver.domain.Order;
+import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
-import com.rperezv365.apifirst.model.CustomerDto;
-import com.rperezv365.apifirst.model.OrderDto;
-import com.rperezv365.apifirst.model.ProductDto;
 import jakarta.servlet.Filter;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,21 +45,20 @@ public class BaseTest {
 
     public MockMvc mockMvc;
 
-    CustomerDto testCustomer;
-    ProductDto testProduct;
-    OrderDto testOrder;
+    Customer testCustomer;
+    Product testProduct;
+    Order testOrder;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(validationFilter)
                 .build();
-/*
+
         testCustomer = customerRepository.findAll().iterator().next();
         testProduct = productRepository.findAll().iterator().next();
         testOrder = orderRepository.findAll().iterator().next();
 
- */
     }
 
 }
