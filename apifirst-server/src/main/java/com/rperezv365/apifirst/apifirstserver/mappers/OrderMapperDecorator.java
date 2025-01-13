@@ -46,6 +46,7 @@ public class OrderMapperDecorator implements OrderMapper {
         OrderDto orderDto = delegate.orderToOrderDto(order);
         orderDto.getCustomer().selectedPaymentMethod(
                 paymentMethodMapper.paymentMethodToPaymentMethodDto(order.getSelectedPaymentMethod()));
+
         return orderDto;
     }
 
@@ -76,7 +77,10 @@ public class OrderMapperDecorator implements OrderMapper {
                             .build());
                 });
 
-        return builder.orderLines(orderLines).build();
+        Order order = builder.orderLines(orderLines).build();
+        orderLines.forEach(orderLine -> orderLine.setOrder(order));
+
+        return order;
     }
 
 }

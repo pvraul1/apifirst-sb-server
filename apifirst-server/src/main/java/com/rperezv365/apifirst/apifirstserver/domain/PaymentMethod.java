@@ -1,6 +1,8 @@
 package com.rperezv365.apifirst.apifirstserver.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.*;
@@ -35,10 +37,20 @@ public class PaymentMethod {
     @ManyToOne
     private Customer customer;
 
+    @NotNull
+    @Size(min = 2, max = 100)
     private String displayName;
+
+    @NotNull
     private Integer cardNumber;
+
+    @NotNull
     private Integer expiryMonth;
+
+    @NotNull
     private Integer expiryYear;
+
+    @NotNull
     private Integer cvv;
 
     @CreationTimestamp
