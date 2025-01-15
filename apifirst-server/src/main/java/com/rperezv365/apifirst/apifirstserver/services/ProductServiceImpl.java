@@ -1,9 +1,11 @@
 package com.rperezv365.apifirst.apifirstserver.services;
 
+import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.apifirstserver.mappers.ProductMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
+import com.rperezv365.apifirst.model.ProductUpdateDto;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+
+    @Override
+    public ProductDto updateProduct(final UUID productId, final ProductUpdateDto product) {
+        Product productToUpdate = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        productMapper.updateProduct(product, productToUpdate);
+
+        return productMapper.productToProductDto(productRepository.save(productToUpdate));
+    }
 
     @Override
     public List<ProductDto> listProducts() {
