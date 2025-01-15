@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.apifirstserver.domain.Order;
 import com.rperezv365.apifirst.apifirstserver.domain.Product;
+import com.rperezv365.apifirst.apifirstserver.mappers.ProductMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
@@ -33,6 +34,9 @@ public class BaseTest {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    ProductMapper productMapper;
 
     @Autowired
     WebApplicationContext webApplicationContext;

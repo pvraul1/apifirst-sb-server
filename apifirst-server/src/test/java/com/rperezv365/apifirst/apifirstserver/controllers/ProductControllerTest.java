@@ -1,25 +1,44 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.config.OpenApiValidationConfig;
+import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.model.DimensionsDto;
 import com.rperezv365.apifirst.model.ImageDto;
 import com.rperezv365.apifirst.model.ProductCreateDto;
+import com.rperezv365.apifirst.model.ProductUpdateDto;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @Import(OpenApiValidationConfig.class)
-class ProductControllerTest extends BaseTest{
+class ProductControllerTest extends BaseTest {
+
+    @Transactional
+    @Test
+    void testUpdateProduct() throws Exception {
+
+        Product product = productRepository.findAll().iterator().next();
+
+        ProductUpdateDto productUpdateDto = productMapper.productToProductUpdateDto(product);
+        productUpdateDto.setDescription("Updated Description");
+
+        mockMvc.perform(put(ProductController.BASE_URL + "/{productId}", product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productUpdateDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", equalTo("Updated Description")));
+
+    }
 
     @Test
     void testCreateProduct() throws Exception {
