@@ -42,6 +42,7 @@ public class Category {
     @Size(min = 3, max = 25)
     private String description;
 
+    @NotNull
     @Size(min = 3, max = 25)
     private String categoryCode;
 

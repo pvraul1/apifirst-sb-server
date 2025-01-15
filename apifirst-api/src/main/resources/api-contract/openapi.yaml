@@ -176,6 +176,37 @@ paths:
           description: Bad Request.
         '404':
           description: Product not found.
+    put:
+      tags:
+        - Product
+      summary: Update an existing product.
+      description: Updates an existing product.
+      operationId: updateProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to update.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product_update'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Product not found.
   /v1/orders:
     get:
       tags:
@@ -578,6 +609,7 @@ components:
       required:
         - category
         - description
+        - category_code
     image:
       type: object
       properties:
@@ -666,6 +698,58 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/image'
+        price:
+          type: string
+          pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
+        cost:
+          type: string
+          pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
+      required:
+        - description
+        - price
+    product_image_update:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the image.
+          nullable: true
+        url:
+          type: string
+          format: url
+          description: The URL of the image.
+          minLength: 5
+          maxLength: 500
+          example: https://www.example.com/image.jpg
+        altText:
+          type: string
+          description: The alt text of the image.
+          minLength: 3
+          maxLength: 255
+          nullable: true
+      required:
+        - url
+        - id
+    product_update:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the product.
+          minLength: 3
+          maxLength: 255
+        dimensions:
+          $ref: '#/components/schemas/dimensions'
+        categories:
+          type: array
+          description: The categories codes for the product.
+          items:
+            type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/product_image_update'
         price:
           type: string
           pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
