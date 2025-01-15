@@ -4,6 +4,7 @@ import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.model.CustomerDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper
 public interface CustomerMapper {
@@ -13,5 +14,10 @@ public interface CustomerMapper {
     @Mapping(target = "dateCreated", ignore = true)
     @Mapping(target = "dateUpdated", ignore = true)
     Customer customerDtoToCustomer(CustomerDto customerDto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dateCreated", ignore = true)
+    @Mapping(target = "dateUpdated", ignore = true)
+    void updateCustomer(CustomerDto customerDto, @MappingTarget Customer customer);
 
 }

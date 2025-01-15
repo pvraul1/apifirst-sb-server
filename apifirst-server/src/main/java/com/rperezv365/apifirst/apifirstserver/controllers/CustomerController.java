@@ -32,6 +32,14 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+    @PutMapping("/{customerId}")
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") final UUID customerId,
+                                                      @RequestBody final CustomerDto customer) {
+        log.info("Updating customer (in controller) called with param: {}", customer);
+
+        return ResponseEntity.ok(customerService.updateCustomer(customerId, customer));
+    }
+
     @PostMapping
     public ResponseEntity<Void> saveNewCustomer(@RequestBody final CustomerDto customer) {
         log.info("Creating customer (in controller) called with param: {}", customer);
