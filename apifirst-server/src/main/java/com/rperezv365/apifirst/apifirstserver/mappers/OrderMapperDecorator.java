@@ -5,6 +5,7 @@ import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import com.rperezv365.apifirst.model.OrderCreateDto;
 import com.rperezv365.apifirst.model.OrderDto;
+import com.rperezv365.apifirst.model.OrderUpdateDto;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,56 @@ public class OrderMapperDecorator implements OrderMapper {
     @Override
     public Order orderDtoToOrder(OrderDto orderDto) {
         return delegate.orderDtoToOrder(orderDto);
+    }
+
+
+    @Override
+    public void updateOrder(OrderUpdateDto orderDto, Order order) {
+        delegate.updateOrder(orderDto, order);
+
+        Customer orderCustomer = customerRepository.findById(orderDto.getCustomerId()).orElseThrow();
+
+        order.setCustomer(orderCustomer);
+
+        PaymentMethod selectedPaymentMethod = order.getCustomer().getPaymentMethods().stream()
+                .filter(pm -> pm.getId().equals(orderDto.getSelectPaymentMethodId()))
+                .findFirst()
+                .orElseThrow();
+
+        order.setSelectedPaymentMethod(selectedPaymentMethod);
+
+        if (orderDto.getOrderLines() != null && !orderDto.getOrderLines().isEmpty()) {
+            orderDto.getOrderLines().forEach(orderLineDto -> {
+                OrderLine existingOrderLine = order.getOrderLines().stream()
+                        .filter(ol -> ol.getId().equals(orderLineDto.getId()))
+                        .findFirst().orElseThrow();
+
+                Product product = productRepository.findById(orderLineDto.getProductId()).orElseThrow();
+
+                existingOrderLine.setProduct(product);
+                existingOrderLine.setOrderQuantity(orderLineDto.getOrderQuantity());
+            });
+        }
+    }
+
+    @Override
+    public OrderUpdateDto orderToUpdateDto(Order order) {
+        OrderUpdateDto orderUpdateDto = delegate.orderToUpdateDto(order);
+
+        orderUpdateDto.setCustomerId(order.getCustomer().getId());
+        orderUpdateDto.setSelectPaymentMethodId(order.getSelectedPaymentMethod().getId());
+
+        if (orderUpdateDto.getOrderLines() != null && !orderUpdateDto.getOrderLines().isEmpty()) {
+            orderUpdateDto.getOrderLines().forEach(orderLineDto -> {
+                OrderLine orderLine = order.getOrderLines().stream()
+                        .filter(ol -> ol.getId().equals(orderLineDto.getId()))
+                        .findFirst()
+                        .orElseThrow();
+                orderLineDto.setProductId(orderLine.getProduct().getId());
+            });
+        }
+
+        return orderUpdateDto;
     }
 
     @Override
