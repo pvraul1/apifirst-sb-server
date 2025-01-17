@@ -5,6 +5,7 @@ import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.apifirstserver.domain.Order;
 import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.apifirstserver.mappers.CustomerMapper;
+import com.rperezv365.apifirst.apifirstserver.mappers.OrderMapper;
 import com.rperezv365.apifirst.apifirstserver.mappers.ProductMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
@@ -41,6 +42,9 @@ public class BaseTest {
 
     @Autowired
     CustomerMapper customerMapper;
+
+    @Autowired
+    OrderMapper orderMapper;
 
     @Autowired
     WebApplicationContext webApplicationContext;

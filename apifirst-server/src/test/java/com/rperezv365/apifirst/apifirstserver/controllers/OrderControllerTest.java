@@ -1,20 +1,40 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
+import com.rperezv365.apifirst.apifirstserver.domain.Order;
 import com.rperezv365.apifirst.model.OrderCreateDto;
 import com.rperezv365.apifirst.model.OrderLineCreateDto;
+import com.rperezv365.apifirst.model.OrderUpdateDto;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 class OrderControllerTest extends BaseTest {
+
+
+    @Test
+    @Transactional
+    void testUpdateOrder() throws Exception {
+        Order order = orderRepository.findAll().get(0);
+        order.getOrderLines().get(0).setOrderQuantity(99);
+
+        OrderUpdateDto orderUpdate = orderMapper.orderToUpdateDto(order);
+
+        mockMvc.perform(put(OrderController.BASE_URL + "/{orderId}", testOrder.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderUpdate))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
+                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(99)));
+    }
 
     @Test
     void listOrders() throws Exception {

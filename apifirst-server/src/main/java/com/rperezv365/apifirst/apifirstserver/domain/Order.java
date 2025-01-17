@@ -1,6 +1,5 @@
 package com.rperezv365.apifirst.apifirstserver.domain;
 
-
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;

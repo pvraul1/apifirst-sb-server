@@ -5,10 +5,12 @@ import com.rperezv365.apifirst.apifirstserver.mappers.OrderMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.model.OrderCreateDto;
 import com.rperezv365.apifirst.model.OrderDto;
+import com.rperezv365.apifirst.model.OrderUpdateDto;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * OrderServiceImpl
@@ -44,6 +46,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto createOrder(final OrderCreateDto orderCreate) {
         Order savedOrder = orderRepository.saveAndFlush(orderMapper.orderCreateDtoToOrder(orderCreate));
+
+        return orderMapper.orderToOrderDto(savedOrder);
+    }
+
+    @Transactional
+    @Override
+    public OrderDto updateOrder(final UUID orderId, final OrderUpdateDto orderUpdateDto) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        orderMapper.updateOrder(orderUpdateDto, order);
+
+        Order savedOrder = orderRepository.saveAndFlush(order);
 
         return orderMapper.orderToOrderDto(savedOrder);
     }

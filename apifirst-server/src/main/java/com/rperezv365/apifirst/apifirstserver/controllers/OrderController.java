@@ -3,6 +3,7 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 import com.rperezv365.apifirst.apifirstserver.services.OrderService;
 import com.rperezv365.apifirst.model.OrderCreateDto;
 import com.rperezv365.apifirst.model.OrderDto;
+import com.rperezv365.apifirst.model.OrderUpdateDto;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,17 @@ public class OrderController {
     public static final String BASE_URL = "/v1/orders";
 
     private final OrderService orderService;
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") final UUID orderId,
+                                            @RequestBody final OrderUpdateDto orderUpdateDto) {
+
+        log.info("Updating order (in controller) called with param: {}", orderUpdateDto);
+
+        OrderDto saveOrder = orderService.updateOrder(orderId, orderUpdateDto);
+
+        return ResponseEntity.ok(saveOrder);
+    }
 
     @PostMapping
     public ResponseEntity<Void> createOrder(@RequestBody final OrderCreateDto orderCreate) {
