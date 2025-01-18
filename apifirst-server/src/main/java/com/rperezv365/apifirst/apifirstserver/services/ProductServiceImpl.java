@@ -5,6 +5,7 @@ import com.rperezv365.apifirst.apifirstserver.mappers.ProductMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
+import com.rperezv365.apifirst.model.ProductPatchDto;
 import com.rperezv365.apifirst.model.ProductUpdateDto;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+
+    @Override
+    public ProductDto patchProduct(final UUID productId, final ProductPatchDto product) {
+        Product productToPath = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        productMapper.patchProduct(product, productToPath);
+
+        return productMapper.productToProductDto(productRepository.save(productToPath));
+    }
 
     @Override
     public ProductDto updateProduct(final UUID productId, final ProductUpdateDto product) {

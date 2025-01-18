@@ -3,6 +3,7 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 import com.rperezv365.apifirst.apifirstserver.services.ProductService;
 import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
+import com.rperezv365.apifirst.model.ProductPatchDto;
 import com.rperezv365.apifirst.model.ProductUpdateDto;
 import java.net.URI;
 import java.util.List;
@@ -33,6 +34,16 @@ public class ProductController {
     public static final String BASE_URL = "/v1/products";
 
     private final ProductService productService;
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductDto> patchProduct(@PathVariable("productId") final UUID productId,
+                                                   @RequestBody final ProductPatchDto product) {
+        log.info("Patching product (in controller) called with param: {}", product);
+
+        ProductDto patchedProduct = productService.patchProduct(productId, product);
+
+        return ResponseEntity.ok(patchedProduct);
+    }
 
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable("productId") final UUID productId,
