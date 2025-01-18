@@ -23,7 +23,7 @@ class OrderControllerTest extends BaseTest {
     @Transactional
     void testUpdateOrder() throws Exception {
         Order order = orderRepository.findAll().get(0);
-        order.getOrderLines().get(0).setOrderQuantity(99);
+        order.getOrderLines().get(0).setOrderQuantity(222);
 
         OrderUpdateDto orderUpdate = orderMapper.orderToUpdateDto(order);
 
@@ -33,7 +33,7 @@ class OrderControllerTest extends BaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
-                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(99)));
+                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(222)));
     }
 
     @Test

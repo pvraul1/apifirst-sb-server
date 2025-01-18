@@ -7,6 +7,7 @@ import com.rperezv365.apifirst.apifirstserver.repositories.CategoryRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ImageRepository;
 import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
+import com.rperezv365.apifirst.model.ProductPatchDto;
 import com.rperezv365.apifirst.model.ProductUpdateDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,45 @@ public abstract class ProductMapperDecorator implements ProductMapper {
     @Override
     public  ProductDto productToProductDto(Product product) {
         return productMapperDelegate.productToProductDto(product);
+    }
+
+    @Override
+    public ProductPatchDto productToProductPatchDto(Product product) {
+        if (product != null) {
+            if (product.getCategories() != null) {
+                List<String> categoryCodes = new ArrayList<>();
+
+                product.getCategories().forEach(category -> {
+                    categoryCodes.add(category.getCategoryCode());
+                });
+
+                ProductPatchDto productPatchDto = productMapperDelegate.productToProductPatchDto(product);
+                productPatchDto.setCategories(categoryCodes);
+
+                return productPatchDto;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void patchProduct(ProductPatchDto productPatchDto, Product target) {
+        productMapperDelegate.patchProduct(productPatchDto, target);
+
+        if (productPatchDto.getImages() != null) {
+            productPatchDto.getImages().forEach(imageDto -> {
+                target.getImages().stream().filter(image -> image.getId().equals(imageDto.getId()))
+                        .findFirst().ifPresent(image -> {
+                            imageMapper.patchImage(imageDto, image);
+                        });
+            });
+        }
+
+        if (productPatchDto.getCategories() != null) {
+            List<Category> categories = categoryCodesToCategories(productPatchDto.getCategories());
+            target.setCategories(categories);
+        }
     }
 
     @Override

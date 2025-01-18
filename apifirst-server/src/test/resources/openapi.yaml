@@ -237,6 +237,37 @@ paths:
           description: Bad Request.
         '404':
           description: Product not found.
+    patch:
+      tags:
+        - Product
+      summary: Patch an existing product.
+      description: Patches an existing product.
+      operationId: patchProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to patch.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product_patch'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Product not found.
   /v1/orders:
     get:
       tags:
@@ -819,6 +850,84 @@ components:
       required:
         - description
         - price
+    product_dimensions_path:
+      type: object
+      properties:
+        length:
+          type: integer
+          description: The length of the product.
+          minimum: 1
+          maximum: 999
+          example: 10
+          nullable: true
+        width:
+          type: integer
+          description: The width of the product.
+          minimum: 1
+          maximum: 999
+          example: 10
+          nullable: true
+        height:
+          type: integer
+          description: The height of the product.
+          minimum: 1
+          maximum: 999
+          example: 10
+          nullable: true
+      description: The dimentions of a product.
+    product_image_patch:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the image.
+        url:
+          type: string
+          format: url
+          description: The URL of the image.
+          minLength: 5
+          maxLength: 500
+          example: https://www.example.com/image.jpg
+          nullable: true
+        altText:
+          type: string
+          description: The alt text of the image.
+          minLength: 3
+          maxLength: 255
+          nullable: true
+      required:
+        - id
+    product_patch:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the product.
+          minLength: 3
+          maxLength: 255
+          nullable: true
+        dimensions:
+          $ref: '#/components/schemas/product_dimensions_path'
+        categories:
+          type: array
+          description: The categories codes for the product.
+          items:
+            type: string
+          nullable: true
+        images:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/product_image_patch'
+        price:
+          type: string
+          pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
+          nullable: true
+        cost:
+          type: string
+          pattern: ^-?(?:0|[1-9]\d{0,2}(?:,?\d{3})*)(?:\.\d+)?$
+          nullable: true
     order_customer:
       type: object
       properties:
@@ -936,7 +1045,7 @@ components:
           type: integer
           description: The quantity of the product in the order.
           minimum: 1
-          maximum: 100
+          maximum: 1000
           example: 2
       required:
         - productId
@@ -975,7 +1084,7 @@ components:
           type: integer
           description: The quantity of the product in the order.
           minimum: 1
-          maximum: 100
+          maximum: 1000
           example: 2
       required:
         - id
