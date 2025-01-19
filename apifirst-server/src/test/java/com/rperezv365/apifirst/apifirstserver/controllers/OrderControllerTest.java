@@ -3,6 +3,7 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 import com.rperezv365.apifirst.apifirstserver.domain.Order;
 import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -15,6 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 class OrderControllerTest extends BaseTest {
+
+    @Test
+    void testDeleteOrderNotFound() throws Exception {
+        mockMvc.perform(delete(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
 
     @Transactional
     @Test

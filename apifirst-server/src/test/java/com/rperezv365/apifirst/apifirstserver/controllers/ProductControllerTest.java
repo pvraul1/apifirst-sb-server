@@ -5,6 +5,7 @@ import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -19,6 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Import(OpenApiValidationConfig.class)
 class ProductControllerTest extends BaseTest {
+
+    @Test
+    void testDeleteProductNotFound() throws Exception {
+        mockMvc.perform(delete(ProductController.BASE_URL + "/{productId}", UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void testDeleteProduct() throws Exception {

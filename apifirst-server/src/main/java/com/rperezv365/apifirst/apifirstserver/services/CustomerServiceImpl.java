@@ -74,7 +74,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void deleteCustomer(final UUID customerId) {
-        customerRepository.deleteById(customerId);
+        customerRepository.findById(customerId)
+                .ifPresentOrElse(customerRepository::delete, () -> {
+                    throw new NotFoundException("Customer not found");
+                });
     }
 
 }

@@ -3,6 +3,7 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 public class CustomerControllerTest extends BaseTest {
+
+    @Test
+    void testDeleteCustomerNotFound() throws Exception {
+        mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void testDeleteCustomer() throws Exception {
