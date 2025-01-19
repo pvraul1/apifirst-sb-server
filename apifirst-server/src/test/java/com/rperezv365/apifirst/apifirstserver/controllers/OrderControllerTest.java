@@ -1,9 +1,7 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.domain.Order;
-import com.rperezv365.apifirst.model.OrderCreateDto;
-import com.rperezv365.apifirst.model.OrderLineCreateDto;
-import com.rperezv365.apifirst.model.OrderUpdateDto;
+import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +16,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class OrderControllerTest extends BaseTest {
 
+    @Test
+    @Transactional
+    void testPatchOrder() throws Exception {
+
+        Order order = orderRepository.findAll().get(0);
+
+        OrderPatchDto orderPatch = OrderPatchDto.builder()
+                .orderLines(Collections.singletonList(OrderLinePatchDto.builder()
+                        .id(order.getOrderLines().get(0).getId())
+                        .orderQuantity(333)
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(OrderController.BASE_URL + "/{orderId}", testOrder.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderPatch))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
+                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(333)));
+    }
 
     @Test
     @Transactional

@@ -2,6 +2,7 @@ package com.rperezv365.apifirst.apifirstserver.services;
 
 import com.rperezv365.apifirst.model.OrderCreateDto;
 import com.rperezv365.apifirst.model.OrderDto;
+import com.rperezv365.apifirst.model.OrderPatchDto;
 import com.rperezv365.apifirst.model.OrderUpdateDto;
 import java.util.List;
 import java.util.UUID;
@@ -15,4 +16,6 @@ public interface OrderService {
     OrderDto createOrder(OrderCreateDto orderCreate);
 
     OrderDto updateOrder(UUID orderId, OrderUpdateDto orderUpdateDto);
+
+    OrderDto patchOrder(UUID orderId, OrderPatchDto orderPatchDto);
 }

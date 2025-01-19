@@ -5,6 +5,7 @@ import com.rperezv365.apifirst.apifirstserver.mappers.OrderMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.model.OrderCreateDto;
 import com.rperezv365.apifirst.model.OrderDto;
+import com.rperezv365.apifirst.model.OrderPatchDto;
 import com.rperezv365.apifirst.model.OrderUpdateDto;
 import java.util.List;
 import java.util.UUID;
@@ -61,6 +62,16 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.saveAndFlush(order);
 
         return orderMapper.orderToOrderDto(savedOrder);
+    }
+
+    @Override
+    public OrderDto patchOrder(final UUID orderId, final OrderPatchDto orderPatchDto) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        orderMapper.patchOrder(orderPatchDto, order);
+
+        return orderMapper.orderToOrderDto(orderRepository.saveAndFlush(order));
     }
 
 }
