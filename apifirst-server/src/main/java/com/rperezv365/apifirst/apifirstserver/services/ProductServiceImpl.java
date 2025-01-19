@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getProductById(final UUID productId) {
         return productRepository.findById(productId)
                 .map(productMapper::productToProductDto)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new NotFoundException("Product not found"));
     }
 
     @Override

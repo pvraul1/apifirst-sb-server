@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto getOrderById(final UUID orderId) {
         return orderRepository.findById(orderId)
                 .map(orderMapper::orderToOrderDto)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new NotFoundException("Order not found"));
     }
 
     @Override
