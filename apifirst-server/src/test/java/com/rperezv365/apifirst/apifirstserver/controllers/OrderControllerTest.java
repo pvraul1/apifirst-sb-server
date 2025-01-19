@@ -16,6 +16,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class OrderControllerTest extends BaseTest {
 
+    @Transactional
+    @Test
+    void testDeleteOrder() throws Exception {
+        OrderCreateDto order = this.createNewOrderDto();
+        Order savedOrder = orderRepository.save(orderMapper.orderCreateDtoToOrder(order));
+
+        mockMvc.perform(delete(OrderController.BASE_URL + "/{orderId}", savedOrder.getId()))
+                .andExpect(status().isNoContent());
+
+        assert orderRepository.findById(savedOrder.getId()).isEmpty();
+    }
+
     @Test
     @Transactional
     void testPatchOrder() throws Exception {
@@ -76,14 +88,7 @@ class OrderControllerTest extends BaseTest {
     @Transactional
     void testCreateOrder() throws Exception {
         assert testCustomer.getPaymentMethods() != null;
-        OrderCreateDto orderCreate = OrderCreateDto.builder()
-                .customerId(testCustomer.getId())
-                .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
-                .orderLines(Collections.singletonList(OrderLineCreateDto.builder()
-                        .productId(testProduct.getId())
-                        .orderQuantity(1)
-                        .build()))
-                .build();
+        OrderCreateDto orderCreate = this.createNewOrderDto();
 
         System.out.println(objectMapper.writeValueAsString(orderCreate));
 
@@ -92,6 +97,17 @@ class OrderControllerTest extends BaseTest {
                         .content(objectMapper.writeValueAsString(orderCreate)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+    }
+
+    private OrderCreateDto createNewOrderDto() {
+        return OrderCreateDto.builder()
+                .customerId(testCustomer.getId())
+                .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
+                .orderLines(Collections.singletonList(OrderLineCreateDto.builder()
+                        .productId(testProduct.getId())
+                        .orderQuantity(1)
+                        .build()))
+                .build();
     }
 
 }

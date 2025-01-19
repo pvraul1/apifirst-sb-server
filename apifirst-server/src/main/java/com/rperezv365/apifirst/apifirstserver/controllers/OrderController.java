@@ -34,6 +34,15 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable("orderId") final UUID orderId) {
+        log.info("Deleting order (in controller) called with param: {}", orderId);
+
+        orderService.deleteOrder(orderId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{orderId}")
     public ResponseEntity<OrderDto> patchOrder(@PathVariable("orderId") final UUID orderId,
                                                @RequestBody final OrderPatchDto orderPatchDto) {

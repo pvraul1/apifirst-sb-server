@@ -35,6 +35,15 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") final UUID productId) {
+        log.info("Deleting product (in controller) called with param: {}", productId);
+
+        productService.deleteProduct(productId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{productId}")
     public ResponseEntity<ProductDto> patchProduct(@PathVariable("productId") final UUID productId,
                                                    @RequestBody final ProductPatchDto product) {

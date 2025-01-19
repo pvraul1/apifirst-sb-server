@@ -30,6 +30,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
+    public void deleteOrder(final UUID orderId) {
+        orderRepository.deleteById(orderId);
+    }
+
+    @Override
     public List<OrderDto> listOrders() {
         return orderRepository.findAll()
                 .stream()

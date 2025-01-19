@@ -39,6 +39,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void deleteProduct(final UUID productId) {
+        productRepository.deleteById(productId);
+    }
+
+    @Override
     public ProductDto updateProduct(final UUID productId, final ProductUpdateDto product) {
         Product productToUpdate = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
