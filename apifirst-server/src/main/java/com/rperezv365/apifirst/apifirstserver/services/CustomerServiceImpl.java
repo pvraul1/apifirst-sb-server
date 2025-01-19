@@ -71,4 +71,10 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.customerToCustomerDto(customerRepository.save(customerToPatch));
     }
 
+    @Transactional
+    @Override
+    public void deleteCustomer(final UUID customerId) {
+        customerRepository.deleteById(customerId);
+    }
+
 }

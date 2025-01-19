@@ -85,13 +85,7 @@ paths:
       description: Returns a single customer.
       operationId: getCustomerById
       parameters:
-        - name: customerId
-          in: path
-          description: ID of customer to return.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/customer_id'
       responses:
         '200':
           description: successful operation
@@ -110,13 +104,7 @@ paths:
       description: Updates an existing customer.
       operationId: updateCustomerById
       parameters:
-        - name: customerId
-          in: path
-          description: ID of customer to update.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/customer_id'
       requestBody:
         content:
           application/json:
@@ -140,13 +128,7 @@ paths:
       description: Patches an existing customer.
       operationId: patchCustomerById
       parameters:
-        - name: customerId
-          in: path
-          description: ID of customer to patch.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/customer_id'
       requestBody:
         content:
           application/json:
@@ -159,6 +141,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/customer'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Customer not found.
+    delete:
+      tags:
+        - Customer
+      summary: Delete a customer by ID.
+      description: Deletes a single customer.
+      operationId: deleteCustomerById
+      parameters:
+        - $ref: '#/components/parameters/customer_id'
+      responses:
+        '204':
+          description: No content.
         '400':
           description: Bad Request.
         '404':
@@ -218,13 +215,7 @@ paths:
       description: Returns a single product.
       operationId: getProductById
       parameters:
-        - name: productId
-          in: path
-          description: ID of product to return.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/product_id'
       responses:
         '200':
           description: successful operation
@@ -243,13 +234,7 @@ paths:
       description: Updates an existing product.
       operationId: updateProductById
       parameters:
-        - name: productId
-          in: path
-          description: ID of product to update.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/product_id'
       requestBody:
         required: true
         content:
@@ -274,13 +259,7 @@ paths:
       description: Patches an existing product.
       operationId: patchProductById
       parameters:
-        - name: productId
-          in: path
-          description: ID of product to patch.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/product_id'
       requestBody:
         required: true
         content:
@@ -355,13 +334,7 @@ paths:
       description: Get order by ID.
       operationId: getOrderById
       parameters:
-        - name: orderId
-          in: path
-          description: ID of order to return.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/order_id'
       responses:
         '200':
           description: successful operation
@@ -380,13 +353,7 @@ paths:
       description: Update order.
       operationId: updateOrder
       parameters:
-        - name: orderId
-          in: path
-          description: ID of order to return.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/order_id'
       requestBody:
         content:
           application/json:
@@ -410,13 +377,7 @@ paths:
       description: Patch order.
       operationId: patchOrder
       parameters:
-        - name: orderId
-          in: path
-          description: ID of order to return.
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/order_id'
       requestBody:
         content:
           application/json:
@@ -481,6 +442,13 @@ components:
       type: http
       scheme: basic
   schemas:
+    uuid_id:
+      type: string
+      format: uuid
+      description: System generated unique identifier for the resource.
+      example: 123e4567-e89b-12d3-a456-426614174000
+      readOnly: true
+      nullable: true
     name:
       type: object
       properties:
@@ -527,12 +495,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the customer.
-          example: 123e4567-e89b-12d3-a456-426614174000
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/uuid_id'
         addressLine1:
           type: string
           description: The first line of the customer's address.
@@ -577,11 +540,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the payment method.
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/uuid_id'
         displayName:
           type: string
           description: The display name of the payment method.
@@ -618,12 +577,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the customer.
-          example: 123e4567-e89b-12d3-a456-426614174000
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/uuid_id'
         name:
           $ref: '#/components/schemas/name'
         shipToAddress:
@@ -817,12 +771,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the customer.
-          example: 123e4567-e89b-12d3-a456-426614174000
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/uuid_id'
         name:
           $ref: '#/components/schemas/customer_name_patch'
         shipToAddress:
@@ -881,11 +830,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the category.
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/uuid_id'
         category:
           type: string
           description: The category of the product.
@@ -916,11 +861,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the image.
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/uuid_id'
         url:
           type: string
           format: url
@@ -1143,9 +1084,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the customer.
+          $ref: '#/components/schemas/uuid_id'
         name:
           $ref: '#/components/schemas/name'
         shipToAddress:
@@ -1178,10 +1117,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the order line.
-          readOnly: true
+          $ref: '#/components/schemas/uuid_id'
         product:
           $ref: '#/components/schemas/order_product'
         orderQuantity:
@@ -1208,10 +1144,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the order.
-          readOnly: true
+          $ref: '#/components/schemas/uuid_id'
         customer:
           $ref: '#/components/schemas/order_customer'
         orderStatus:
@@ -1364,3 +1297,28 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/category'
+  parameters:
+    customer_id:
+      name: customerId
+      in: path
+      description: ID of customer.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    product_id:
+      name: productId
+      in: path
+      description: ID of product.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    order_id:
+      name: orderId
+      in: path
+      description: ID of order.
+      required: true
+      schema:
+        type: string
+        format: uuid
