@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto getCustomerById(final UUID customerId) {
         return customerMapper.customerToCustomerDto(customerRepository
                 .findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found")));
+                .orElseThrow(() -> new NotFoundException("Customer not found")));
     }
 
     @Transactional

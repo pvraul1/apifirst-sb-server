@@ -91,6 +91,15 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")));
     }
 
+    @DisplayName("Test get customer by id not found")
+    @Test
+    void testGetCustomerByIdNotFound() throws Exception {
+        assert super.testCustomer.getId() != null;
+        super.mockMvc.perform(get(CustomerController.BASE_URL + "/" + UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     @DisplayName("Test get customer by id")
     @Test
     void testGetCustomerById() throws Exception {
