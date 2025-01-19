@@ -2,12 +2,26 @@ package com.rperezv365.apifirst.apifirstserver.mappers;
 
 import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.model.CustomerDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import com.rperezv365.apifirst.model.CustomerPatchDto;
+import org.mapstruct.*;
 
 @Mapper
+@DecoratedWith(CustomerMapperDecorator.class)
 public interface CustomerMapper {
+
+    CustomerPatchDto customerToCustomerPatchDto(Customer customer);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dateCreated", ignore = true)
+    @Mapping(target = "dateUpdated", ignore = true)
+    @Mapping(target = "shipToAddress.id", ignore = true)
+    @Mapping(target = "billToAddress.id", ignore = true)
+    @Mapping(target = "paymentMethods", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    void patchCustomer(CustomerPatchDto customerPatchDto, @MappingTarget Customer target);
+
+    CustomerDto customerToDto(Customer customer);
 
     CustomerDto customerToCustomerDto(Customer customer);
 

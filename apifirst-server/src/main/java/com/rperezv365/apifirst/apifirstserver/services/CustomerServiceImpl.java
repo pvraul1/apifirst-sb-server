@@ -4,6 +4,7 @@ import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.apifirstserver.mappers.CustomerMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.model.CustomerDto;
+import com.rperezv365.apifirst.model.CustomerPatchDto;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,16 @@ public class CustomerServiceImpl implements CustomerService {
         customerMapper.updateCustomer(customer, customerToUpdate);
 
         return customerMapper.customerToCustomerDto(customerRepository.save(customerToUpdate));
+    }
+
+    @Override
+    public CustomerDto patchCustomer(final UUID customerId, final CustomerPatchDto customer) {
+        Customer customerToPatch = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        customerMapper.patchCustomer(customer, customerToPatch);
+
+        return customerMapper.customerToCustomerDto(customerRepository.save(customerToPatch));
     }
 
 }

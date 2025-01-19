@@ -2,6 +2,7 @@ package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.services.CustomerService;
 import com.rperezv365.apifirst.model.CustomerDto;
+import com.rperezv365.apifirst.model.CustomerPatchDto;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +32,14 @@ public class CustomerController {
     public static final String BASE_URL = "/v1/customers";
 
     private final CustomerService customerService;
+
+    @PatchMapping("/{customerId}")
+    public ResponseEntity<CustomerDto> patchCustomer(@PathVariable("customerId") final UUID customerId,
+                                                     @RequestBody final CustomerPatchDto customer) {
+        log.info("Patching customer (in controller) called with param: {}", customer);
+
+        return ResponseEntity.ok(customerService.patchCustomer(customerId, customer));
+    }
 
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") final UUID customerId,

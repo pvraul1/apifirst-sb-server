@@ -133,6 +133,36 @@ paths:
           description: Bad Request.
         '404':
           description: Customer not found.
+    patch:
+      tags:
+        - Customer
+      summary: Patch an existing customer.
+      description: Patches an existing customer.
+      operationId: patchCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          description: ID of customer to patch.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customer_patch'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Customer not found.
   /v1/products:
     get:
       tags:
@@ -640,6 +670,157 @@ components:
             A URI reference that identifies the specific occurrence of the
             problem.  It may or may not yield further information if
             dereferenced.
+    customer_name_patch:
+      type: object
+      properties:
+        prefix:
+          type: string
+          description: The prefix of the customer's name.
+          example: Mr.
+          minLength: 0
+          maxLength: 25
+          nullable: true
+        firstName:
+          type: string
+          description: The first name of the customer.
+          example: John
+          minLength: 2
+          maxLength: 100
+          nullable: true
+        lastName:
+          type: string
+          description: The last name of the customer.
+          example: Doe
+          minLength: 2
+          maxLength: 100
+          nullable: true
+        suffix:
+          type: string
+          description: The suffix of the customer's name.
+          example: Jr.
+          minLength: 0
+          maxLength: 25
+          nullable: true
+    customer_address_patch:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the customer.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        addressLine1:
+          type: string
+          description: The first line of the customer's address.
+          example: 123 Main St.
+          minLength: 3
+          maxLength: 100
+          nullable: true
+        addressLine2:
+          type: string
+          description: The second line of the customer's address.
+          example: Suite 200
+          minLength: 3
+          maxLength: 100
+          nullable: true
+        city:
+          type: string
+          description: The city of the customer's address.
+          example: St Louis
+          minLength: 2
+          maxLength: 100
+          nullable: true
+        state:
+          type: string
+          description: Two characters state code of the customer's address.
+          example: WA
+          minLength: 2
+          maxLength: 2
+          nullable: true
+        zip:
+          type: string
+          description: The zip code of the customer's address.
+          example: '33701'
+          minLength: 5
+          maxLength: 10
+          nullable: true
+      required:
+        - id
+    customer_payment_method_patch:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the payment method.
+        displayName:
+          type: string
+          description: The display name of the payment method.
+          example: My Chase Card
+          minLength: 2
+          maxLength: 100
+          nullable: true
+        cardNumber:
+          type: integer
+          description: The card number of the payment method.
+          example: 4111111111111111
+          nullable: true
+        expiryMonth:
+          type: integer
+          description: The expiry month of the payment method.
+          example: 12
+          nullable: true
+        expiryYear:
+          type: integer
+          description: The expiry year of the payment method.
+          example: 26
+          nullable: true
+        cvv:
+          type: integer
+          description: The CVV of the payment method.
+          example: 123
+          nullable: true
+      required:
+        - id
+    customer_patch:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the customer.
+          example: 123e4567-e89b-12d3-a456-426614174000
+          readOnly: true
+          nullable: true
+        name:
+          $ref: '#/components/schemas/customer_name_patch'
+        shipToAddress:
+          $ref: '#/components/schemas/customer_address_patch'
+          nullable: true
+        billToAddress:
+          $ref: '#/components/schemas/customer_address_patch'
+          nullable: true
+        email:
+          type: string
+          description: The email address of the customer.
+          maxLength: 255
+          minLength: 3
+          example: rperezv365@gmail.com
+          nullable: true
+        phone:
+          type: string
+          description: The phone number of the customer.
+          maxLength: 15
+          minLength: 7
+          example: 123-456-7890
+          nullable: true
+        paymentMethods:
+          type: array
+          nullable: true
+          description: The payment methods of the customer.
+          items:
+            $ref: '#/components/schemas/customer_payment_method_patch'
     dimensions:
       type: object
       properties:

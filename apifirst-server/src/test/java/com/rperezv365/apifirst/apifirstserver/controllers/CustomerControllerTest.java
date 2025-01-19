@@ -1,9 +1,8 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.domain.Customer;
-import com.rperezv365.apifirst.model.AddressDto;
-import com.rperezv365.apifirst.model.CustomerDto;
-import com.rperezv365.apifirst.model.NameDto;
+import com.rperezv365.apifirst.model.*;
+import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +25,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 public class CustomerControllerTest extends BaseTest {
+
+    @Transactional
+    @DisplayName("Test Update Customer")
+    @Test
+    void testPatchCustomer() throws Exception {
+        Customer customer = customerRepository.findAll().iterator().next();
+
+        CustomerPatchDto customerPatch = CustomerPatchDto.builder()
+                .name(CustomerNamePatchDto.builder()
+                        .firstName("Updated")
+                        .lastName("Updated2")
+                        .build())
+                .paymentMethods(Collections.singletonList(CustomerPaymentMethodPatchDto.builder()
+                        .id(customer.getPaymentMethods().get(0).getId())
+                        .displayName("NEW NAME")
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(CustomerController.BASE_URL + "/{customerId}", testCustomer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerPatch)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
+                .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")))
+                .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")));
+    }
 
     @Transactional
     @DisplayName("Test Update Customer")
