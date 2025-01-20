@@ -27,6 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class CustomerControllerTest extends BaseTest {
 
+    @DisplayName("Test Delete Conflict With Orders")
+    @Test
+    void testDeleteConflictWithOrders() throws Exception {
+        Customer customer = customerRepository.findAll().iterator().next();
+
+        mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", customer.getId()))
+                .andExpect(status().isConflict());
+    }
+
     @Test
     void testDeleteCustomerNotFound() throws Exception {
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID()))
