@@ -28,6 +28,18 @@ import jakarta.servlet.Filter;
 @Configuration
 public class OpenApiValidationConfig {
 
+    public static final String OA3_SPEC;
+
+    static {
+        try {
+            ClassPathResource resource = new ClassPathResource("openapi.yaml");
+            Path yamlPath = Path.of(resource.getURI());
+            OA3_SPEC = Files.readString(yamlPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Bean
     public Filter validationFilter() {
 
@@ -40,13 +52,7 @@ public class OpenApiValidationConfig {
     @Bean
     public WebMvcConfigurer openAPIValidationInterceptor() throws IOException {
 
-        ClassPathResource resource = new ClassPathResource("openapi.yaml");
-
-        Path yamlPath = Path.of(resource.getURI());
-        String yamlContent = Files.readString(yamlPath);
-
-        OpenApiInteractionValidator validator = OpenApiInteractionValidator
-                .createForInlineApiSpecification(yamlContent)
+        OpenApiInteractionValidator validator = OpenApiInteractionValidator.createForInlineApiSpecification(OA3_SPEC)
                 .build();
 
         /*
