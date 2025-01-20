@@ -2,6 +2,7 @@ package com.rperezv365.apifirst.apifirstserver.services;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.zalando.problem.AbstractThrowableProblem;
 
 /**
  * NotFoundException
@@ -13,25 +14,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @since 1.17
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Resource not found")
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends AbstractThrowableProblem {
 
     public NotFoundException(String message) {
-        super(message);
-    }
-
-    public NotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+        super(null, message, org.zalando.problem.Status.NOT_FOUND);
     }
 
     public NotFoundException() {
+        super(null, "Requested Entity Not Found", org.zalando.problem.Status.NOT_FOUND);
+    }
+
+    public NotFoundException(String message, String detail) {
+        super(null, message, org.zalando.problem.Status.NOT_FOUND, detail);
     }
 
 }
