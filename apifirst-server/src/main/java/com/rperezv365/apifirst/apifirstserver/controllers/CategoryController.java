@@ -1,7 +1,7 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
-import com.rperezv365.apifirst.model.CategoryDto;
 import com.rperezv365.apifirst.apifirstserver.services.CategoryService;
+import com.rperezv365.apifirst.model.CategoryDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
