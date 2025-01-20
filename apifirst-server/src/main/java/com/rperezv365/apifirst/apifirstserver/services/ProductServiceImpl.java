@@ -2,6 +2,7 @@ package com.rperezv365.apifirst.apifirstserver.services;
 
 import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.apifirstserver.mappers.ProductMapper;
+import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import com.rperezv365.apifirst.model.ProductCreateDto;
 import com.rperezv365.apifirst.model.ProductDto;
@@ -27,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final OrderRepository orderRepository;
 
     @Override
     public ProductDto patchProduct(final UUID productId, final ProductPatchDto product) {
@@ -40,8 +42,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(final UUID productId) {
-        productRepository.findById(productId)
-                .ifPresentOrElse(productRepository::delete, () -> {
+        productRepository.findById(productId).ifPresentOrElse(product -> {
+                    if (orderRepository.findAllByOrderLines_Product(product).isEmpty()) {
+                        productRepository.delete(product);
+                    } else {
+                        throw new ConflictException("Product is used in orders");
+                    }
+
+                }, () -> {
                     throw new NotFoundException("Product not found");
                 });
     }
