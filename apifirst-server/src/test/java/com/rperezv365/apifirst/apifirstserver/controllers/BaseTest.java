@@ -21,6 +21,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.zalando.logbook.Logbook;
+import org.zalando.logbook.servlet.LogbookFilter;
 
 /**
  * BaseTest
@@ -67,7 +69,9 @@ public class BaseTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .addFilter(new LogbookFilter(Logbook.create()))
+                .build();
 
         testCustomer = customerRepository.findAll().iterator().next();
         testProduct = productRepository.findAll().iterator().next();
