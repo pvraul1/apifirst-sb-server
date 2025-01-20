@@ -45,11 +45,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/customer_list'
         '404':
-          description: Not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/not_found_404'
     post:
       tags:
         - Customer
@@ -72,11 +68,7 @@ paths:
                 format: uri
                 example: /v1/customers/123e4567-e89b-12d3-a456-426614174000
         '400':
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/bad_request_400'
   /v1/customers/{customerId}:
     get:
       tags:
@@ -94,9 +86,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/customer'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Customer not found.
+          $ref: '#/components/responses/not_found_404'
     put:
       tags:
         - Customer
@@ -118,9 +110,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/customer'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Customer not found.
+          $ref: '#/components/responses/not_found_404'
     patch:
       tags:
         - Customer
@@ -142,9 +134,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/customer'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Customer not found.
+          $ref: '#/components/responses/not_found_404'
     delete:
       tags:
         - Customer
@@ -157,11 +149,11 @@ paths:
         '204':
           description: No content.
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          $ref: '#/components/responses/Problem'
+          $ref: '#/components/responses/not_found_404'
         '409':
-          description: Conflict.
+          $ref: '#/components/responses/conflict_409'
   /v1/products:
     get:
       tags:
@@ -177,11 +169,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/product_list'
         '404':
-          description: Not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/not_found_404'
     post:
       tags:
         - Product
@@ -204,11 +192,7 @@ paths:
                 format: uri
                 example: /v1/products/123e4567-e89b-12d3-a456-426614174000
         '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/bad_request_400'
   /v1/products/{productId}:
     get:
       tags:
@@ -226,9 +210,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/product'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Product not found.
+          $ref: '#/components/responses/not_found_404'
     put:
       tags:
         - Product
@@ -251,9 +235,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/product'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Product not found.
+          $ref: '#/components/responses/not_found_404'
     patch:
       tags:
         - Product
@@ -276,9 +260,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/product'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Product not found.
+          $ref: '#/components/responses/not_found_404'
     delete:
       tags:
         - Product
@@ -291,11 +275,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Product not found.
+          $ref: '#/components/responses/not_found_404'
         '409':
-          description: Conflict.
+          $ref: '#/components/responses/conflict_409'
   /v1/orders:
     get:
       tags:
@@ -311,13 +295,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/order_list'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/not_found_404'
     post:
       tags:
         - Order
@@ -340,11 +320,7 @@ paths:
                 format: uri
                 example: /v1/orders/123e4567-e89b-12d3-a456-426614174000
         '400':
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/bad_request_400'
   /v1/orders/{orderId}:
     get:
       tags:
@@ -362,9 +338,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/order'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Order not found.
+          $ref: '#/components/responses/not_found_404'
     put:
       tags:
         - Order
@@ -386,9 +362,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/order'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Order not found.
+          $ref: '#/components/responses/not_found_404'
     patch:
       tags:
         - Order
@@ -410,9 +386,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/order'
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Order not found.
+          $ref: '#/components/responses/not_found_404'
     delete:
       tags:
         - Order
@@ -425,9 +401,9 @@ paths:
         '204':
           description: Not content.
         '400':
-          description: Bad Request.
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Order not found.
+          $ref: '#/components/responses/not_found_404'
   /v1/categories:
     get:
       tags:
@@ -443,17 +419,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/category_list'
         '400':
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/bad_request_400'
         '404':
-          description: Not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+          $ref: '#/components/responses/not_found_404'
 security:
   - basic_auth: []
 components:
@@ -1331,6 +1299,29 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/category'
+  responses:
+    not_found_404:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    bad_request_400:
+      description: >-
+        "Request was received but was invalid. Check format and content of the
+        request. See the problem detail for more information."
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    conflict_409:
+      description: >-
+        "Unable to complete the request due to a conflict with the current state
+        of the target resource. May be due to constraint violation."
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
   parameters:
     customer_id:
       name: customerId
@@ -1356,10 +1347,3 @@ components:
       schema:
         type: string
         format: uuid
-  responses:
-    Problem:
-      description: Problem.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
