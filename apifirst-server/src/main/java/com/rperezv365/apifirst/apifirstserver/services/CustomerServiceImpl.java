@@ -3,6 +3,7 @@ package com.rperezv365.apifirst.apifirstserver.services;
 import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.apifirstserver.mappers.CustomerMapper;
 import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
+import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.model.CustomerDto;
 import com.rperezv365.apifirst.model.CustomerPatchDto;
 import java.util.List;
@@ -25,8 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-
     private final CustomerMapper customerMapper;
+    private final OrderRepository orderRepository;
 
     @Override
     public List<CustomerDto> listCustomers() {
@@ -74,10 +75,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void deleteCustomer(final UUID customerId) {
-        customerRepository.findById(customerId)
-                .ifPresentOrElse(customerRepository::delete, () -> {
-                    throw new NotFoundException("Customer not found");
-                });
+        customerRepository.findById(customerId).ifPresentOrElse(customer -> {
+                if (orderRepository.findAllByCustomer(customer).isEmpty()) {
+                    customerRepository.delete(customer);
+                } else {
+                    throw new ConflictException("Customer has orders");
+                }
+            }, () -> {
+                throw new NotFoundException("Customer not found");
+            });
     }
 
 }
