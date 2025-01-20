@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto patchCustomer(final UUID customerId, final CustomerPatchDto customer) {
         Customer customerToPatch = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
 
         customerMapper.patchCustomer(customer, customerToPatch);
 

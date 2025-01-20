@@ -38,6 +38,27 @@ class OrderControllerTest extends BaseTest {
 
     @Test
     @Transactional
+    @DisplayName("Test Patch Order Not Found")
+    void testPatchOrderNotFound() throws Exception {
+
+        Order order = orderRepository.findAll().get(0);
+
+        OrderPatchDto orderPatch = OrderPatchDto.builder()
+                .orderLines(Collections.singletonList(OrderLinePatchDto.builder()
+                        .id(order.getOrderLines().get(0).getId())
+                        .orderQuantity(333)
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderPatch))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
     void testPatchOrder() throws Exception {
 
         Order order = orderRepository.findAll().get(0);

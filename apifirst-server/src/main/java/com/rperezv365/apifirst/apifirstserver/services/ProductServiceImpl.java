@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto patchProduct(final UUID productId, final ProductPatchDto product) {
         Product productToPath = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new NotFoundException("Product not found"));
 
         productMapper.patchProduct(product, productToPath);
 
