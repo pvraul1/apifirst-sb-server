@@ -1,5 +1,6 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
+import com.atlassian.oai.validator.OpenApiInteractionValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rperezv365.apifirst.apifirstserver.domain.Customer;
 import com.rperezv365.apifirst.apifirstserver.domain.Order;
@@ -11,8 +12,12 @@ import com.rperezv365.apifirst.apifirstserver.repositories.CustomerRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.OrderRepository;
 import com.rperezv365.apifirst.apifirstserver.repositories.ProductRepository;
 import jakarta.servlet.Filter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -50,9 +55,6 @@ public class BaseTest {
     WebApplicationContext webApplicationContext;
 
     @Autowired
-    Filter validationFilter;
-
-    @Autowired
     ObjectMapper objectMapper;
 
     public MockMvc mockMvc;
@@ -61,15 +63,28 @@ public class BaseTest {
     Product testProduct;
     Order testOrder;
 
+    OpenApiInteractionValidator validator;
+
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .addFilter(validationFilter)
-                .build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         testCustomer = customerRepository.findAll().iterator().next();
         testProduct = productRepository.findAll().iterator().next();
         testOrder = orderRepository.findAll().iterator().next();
+
+        String OA3_SPEC;
+        try {
+            ClassPathResource resource = new ClassPathResource("openapi.yaml");
+            Path yamlPath = Path.of(resource.getURI());
+            OA3_SPEC = Files.readString(yamlPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        validator = OpenApiInteractionValidator
+                .createForInlineApiSpecification(OA3_SPEC)
+                .build();
 
     }
 

@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.atlassian.oai.validator.mockmvc.OpenApiValidationMatchers.openApi;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,13 +34,15 @@ public class CustomerControllerTest extends BaseTest {
         Customer customer = customerRepository.findAll().iterator().next();
 
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", customer.getId()))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(openApi().isValid(super.validator));;
     }
 
     @Test
     void testDeleteCustomerNotFound() throws Exception {
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID()))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));;
     }
 
     @Test
@@ -48,7 +51,8 @@ public class CustomerControllerTest extends BaseTest {
         Customer savedCustomer = customerRepository.save(customerMapper.customerDtoToCustomer(customer));
 
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", savedCustomer.getId()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andExpect(openApi().isValid(super.validator));;
 
         assert customerRepository.findById(savedCustomer.getId()).isEmpty();
     }
@@ -74,7 +78,8 @@ public class CustomerControllerTest extends BaseTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerPatch)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));;
     }
 
     @Transactional
@@ -101,7 +106,8 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
                 .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")))
-                .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")));
+                .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")))
+                .andExpect(openApi().isValid(super.validator));;
     }
 
     @Transactional
@@ -118,7 +124,8 @@ public class CustomerControllerTest extends BaseTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerMapper.customerToCustomerDto(customer))))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));;
     }
 
     @Transactional
@@ -138,7 +145,8 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
                 .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")))
-                .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")));
+                .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @DisplayName("Test get customer by id not found")
@@ -147,7 +155,8 @@ public class CustomerControllerTest extends BaseTest {
         assert super.testCustomer.getId() != null;
         super.mockMvc.perform(get(CustomerController.BASE_URL + "/" + UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @DisplayName("Test get customer by id")
@@ -157,7 +166,8 @@ public class CustomerControllerTest extends BaseTest {
         super.mockMvc.perform(get(CustomerController.BASE_URL + "/" + super.testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(super.testCustomer.getId().toString()));
+                .andExpect(jsonPath("$.id").value(super.testCustomer.getId().toString()))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @DisplayName("Test list customers")
@@ -167,8 +177,8 @@ public class CustomerControllerTest extends BaseTest {
         super.mockMvc.perform(get(CustomerController.BASE_URL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", greaterThan(0)));
-
+                .andExpect(jsonPath("$.size()", greaterThan(0)))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @DisplayName("Test Create Customer")
@@ -180,7 +190,8 @@ public class CustomerControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"));
+                .andExpect(header().exists("Location"))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     private CustomerDto buildTestCustomerDto() {

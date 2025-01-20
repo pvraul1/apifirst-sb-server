@@ -1,7 +1,5 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
-import com.atlassian.oai.validator.OpenApiInteractionValidator;
-import com.rperezv365.apifirst.apifirstserver.config.OpenApiValidationConfig;
 import com.rperezv365.apifirst.apifirstserver.domain.Product;
 import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
@@ -10,7 +8,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,24 +18,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@Import(OpenApiValidationConfig.class)
 class ProductControllerTest extends BaseTest {
 
     @Test
     void testDeleteConflictProductHasOrders() throws Exception {
-        OpenApiInteractionValidator validator = OpenApiInteractionValidator
-                .createForInlineApiSpecification(OpenApiValidationConfig.OA3_SPEC)
-                .build();
-
-        mockMvc.perform(delete(ProductController.BASE_URL + "/{productId}", testProduct.getId()))
+        mockMvc.perform(delete(ProductController.BASE_URL + "/{productId}", super.testProduct.getId()))
                 .andExpect(status().isConflict())
-                .andExpect(openApi().isValid(validator));
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
     void testDeleteProductNotFound() throws Exception {
         mockMvc.perform(delete(ProductController.BASE_URL + "/{productId}", UUID.randomUUID()))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -47,7 +40,8 @@ class ProductControllerTest extends BaseTest {
         Product savedProduct = productRepository.save(productMapper.productCreateDtoToProduct(product));
 
         mockMvc.perform(delete(ProductController.BASE_URL + "/{productId}", savedProduct.getId()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andExpect(openApi().isValid(super.validator));
 
         assert productRepository.findById(savedProduct.getId()).isEmpty();
     }
@@ -65,7 +59,8 @@ class ProductControllerTest extends BaseTest {
         mockMvc.perform(patch(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productPatchDto)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Transactional
@@ -81,7 +76,8 @@ class ProductControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productPatchDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.description", equalTo("Updated Description")));
+                .andExpect(jsonPath("$.description", equalTo("Updated Description")))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Transactional
@@ -97,7 +93,8 @@ class ProductControllerTest extends BaseTest {
         mockMvc.perform(put(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productUpdateDto)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Transactional
@@ -113,8 +110,8 @@ class ProductControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productUpdateDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.description", equalTo("Updated Description")));
-
+                .andExpect(jsonPath("$.description", equalTo("Updated Description")))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -125,8 +122,8 @@ class ProductControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newProduct)))
                 .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"));
-
+                .andExpect(header().exists("Location"))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     private ProductCreateDto createTestProductCreateDto() {
@@ -152,14 +149,16 @@ class ProductControllerTest extends BaseTest {
         mockMvc.perform(get(ProductController.BASE_URL)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", greaterThan(0)));
+                .andExpect(jsonPath("$.length()", greaterThan(0)))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
     void getProductByIdNotFound() throws Exception {
         mockMvc.perform(get(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -167,7 +166,8 @@ class ProductControllerTest extends BaseTest {
         mockMvc.perform(get(ProductController.BASE_URL + "/{productId}", testProduct.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(testProduct.getId().toString())));
+                .andExpect(jsonPath("$.id", equalTo(testProduct.getId().toString())))
+                .andExpect(openApi().isValid(super.validator));
     }
 
 }

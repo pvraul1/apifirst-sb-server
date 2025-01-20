@@ -17,6 +17,7 @@
 	<properties>
 		<swagger.request.validator.version>2.39.0</swagger.request.validator.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+		<problem-spring-web.version>0.29.1</problem-spring-web.version>
 	</properties>
 
 	<dependencies>
@@ -53,6 +54,11 @@
 			<version>${org.mapstruct.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>problem-spring-web-starter</artifactId>
+			<version>${problem-spring-web.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -61,18 +67,6 @@
 			<groupId>com.atlassian.oai</groupId>
 			<artifactId>swagger-request-validator-mockmvc</artifactId>
 			<version>${swagger.request.validator.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.atlassian.oai</groupId>
-			<artifactId>swagger-request-validator-spring-webmvc</artifactId>
-			<version>${swagger.request.validator.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

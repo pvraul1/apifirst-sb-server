@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.atlassian.oai.validator.mockmvc.OpenApiValidationMatchers.openApi;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,7 +32,8 @@ class OrderControllerTest extends BaseTest {
         Order savedOrder = orderRepository.save(orderMapper.orderCreateDtoToOrder(order));
 
         mockMvc.perform(delete(OrderController.BASE_URL + "/{orderId}", savedOrder.getId()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andExpect(openApi().isValid(super.validator));
 
         assert orderRepository.findById(savedOrder.getId()).isEmpty();
     }
@@ -54,7 +56,8 @@ class OrderControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderPatch))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -76,7 +79,8 @@ class OrderControllerTest extends BaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
-                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(333)));
+                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(333)))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @DisplayName("Test Update Order Not Found")
@@ -92,7 +96,8 @@ class OrderControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderUpdate))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -109,7 +114,8 @@ class OrderControllerTest extends BaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
-                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(222)));
+                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(222)))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -117,7 +123,8 @@ class OrderControllerTest extends BaseTest {
         super.mockMvc.perform(get(OrderController.BASE_URL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", greaterThan(0)));
+                .andExpect(jsonPath("$.size()", greaterThan(0)))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -125,7 +132,8 @@ class OrderControllerTest extends BaseTest {
         assert super.testOrder.getId() != null;
         super.mockMvc.perform(get(OrderController.BASE_URL + "/" + UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -134,7 +142,8 @@ class OrderControllerTest extends BaseTest {
         super.mockMvc.perform(get(OrderController.BASE_URL + "/" + super.testOrder.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(super.testOrder.getId().toString()));
+                .andExpect(jsonPath("$.id").value(super.testOrder.getId().toString()))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -149,7 +158,8 @@ class OrderControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderCreate)))
                 .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"));
+                .andExpect(header().exists("Location"))
+                .andExpect(openApi().isValid(super.validator));
     }
 
     private OrderCreateDto createNewOrderDto() {
