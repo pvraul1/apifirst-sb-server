@@ -4,6 +4,7 @@ import com.rperezv365.apifirst.apifirstserver.domain.Order;
 import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
 import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -55,6 +56,22 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
                 .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(333)));
+    }
+
+    @DisplayName("Test Update Order Not Found")
+    @Test
+    @Transactional
+    void testUpdateOrderNotFound() throws Exception {
+        Order order = orderRepository.findAll().get(0);
+        order.getOrderLines().get(0).setOrderQuantity(222);
+
+        OrderUpdateDto orderUpdate = orderMapper.orderToUpdateDto(order);
+
+        mockMvc.perform(put(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderUpdate))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto updateProduct(final UUID productId, final ProductUpdateDto product) {
         Product productToUpdate = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new NotFoundException("Product not found"));
 
         productMapper.updateProduct(product, productToUpdate);
 

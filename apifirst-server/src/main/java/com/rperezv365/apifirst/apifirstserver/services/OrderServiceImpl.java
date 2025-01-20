@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto updateOrder(final UUID orderId, final OrderUpdateDto orderUpdateDto) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new NotFoundException("Order not found"));
 
         orderMapper.updateOrder(orderUpdateDto, order);
 

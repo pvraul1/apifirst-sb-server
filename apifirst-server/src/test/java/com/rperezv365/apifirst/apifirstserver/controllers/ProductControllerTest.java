@@ -6,6 +6,7 @@ import com.rperezv365.apifirst.model.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -52,6 +53,22 @@ class ProductControllerTest extends BaseTest {
                         .content(objectMapper.writeValueAsString(productPatchDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description", equalTo("Updated Description")));
+    }
+
+    @Transactional
+    @Test
+    @DisplayName("Test Update Product Not Found")
+    void testUpdateProductNotFound() throws Exception {
+
+        Product product = productRepository.findAll().iterator().next();
+
+        ProductUpdateDto productUpdateDto = productMapper.productToProductUpdateDto(product);
+        productUpdateDto.setDescription("Updated Description");
+
+        mockMvc.perform(put(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productUpdateDto)))
+                .andExpect(status().isNotFound());
     }
 
     @Transactional
