@@ -35,14 +35,14 @@ public class CustomerControllerTest extends BaseTest {
 
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", customer.getId()))
                 .andExpect(status().isConflict())
-                .andExpect(openApi().isValid(super.validator));;
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
     void testDeleteCustomerNotFound() throws Exception {
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID()))
                 .andExpect(status().isNotFound())
-                .andExpect(openApi().isValid(super.validator));;
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class CustomerControllerTest extends BaseTest {
 
         mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", savedCustomer.getId()))
                 .andExpect(status().isNoContent())
-                .andExpect(openApi().isValid(super.validator));;
+                .andExpect(openApi().isValid(super.validator));
 
         assert customerRepository.findById(savedCustomer.getId()).isEmpty();
     }
@@ -79,7 +79,7 @@ public class CustomerControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerPatch)))
                 .andExpect(status().isNotFound())
-                .andExpect(openApi().isValid(super.validator));;
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Transactional
@@ -107,7 +107,7 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
                 .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")))
                 .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")))
-                .andExpect(openApi().isValid(super.validator));;
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Transactional
@@ -125,7 +125,7 @@ public class CustomerControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerMapper.customerToCustomerDto(customer))))
                 .andExpect(status().isNotFound())
-                .andExpect(openApi().isValid(super.validator));;
+                .andExpect(openApi().isValid(super.validator));
     }
 
     @Transactional
@@ -179,6 +179,19 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", greaterThan(0)))
                 .andExpect(openApi().isValid(super.validator));
+    }
+
+    @DisplayName("Test Create CustomerBadRequest")
+    @Test
+    void testCreateCustomerBadRequest() throws Exception {
+        CustomerDto customer = this.buildTestCustomerDto();
+        customer.setName(null);
+        customer.setBillToAddress(null);
+
+        mockMvc.perform(post(CustomerController.BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("Test Create Customer")

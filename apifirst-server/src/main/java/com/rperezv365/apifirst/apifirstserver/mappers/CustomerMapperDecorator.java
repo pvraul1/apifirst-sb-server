@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 public abstract class CustomerMapperDecorator implements CustomerMapper {
 
-
     @Autowired
     @Qualifier("delegate")
     private CustomerMapper delegate;
@@ -45,7 +44,7 @@ public abstract class CustomerMapperDecorator implements CustomerMapper {
 
     @Override
     public CustomerDto customerToCustomerDto(Customer customer) {
-        return delegate.customerToDto(customer);
+        return delegate.customerToCustomerDto(customer);
     }
 
     @Override

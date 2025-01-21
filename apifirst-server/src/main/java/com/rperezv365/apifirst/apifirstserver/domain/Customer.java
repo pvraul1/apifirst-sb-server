@@ -1,6 +1,7 @@
 package com.rperezv365.apifirst.apifirstserver.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -34,12 +35,15 @@ public class Customer {
     @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
 
+    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private Address shipToAddress;
 
+    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private Address billToAddress;
 
+    @NotNull
     @Embedded
     private Name name;
 

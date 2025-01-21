@@ -1,7 +1,6 @@
 package com.rperezv365.apifirst.apifirstserver.controllers;
 
 import com.rperezv365.apifirst.apifirstserver.controllers.traits.ConstraintViolationExceptionTrait;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
@@ -15,6 +14,5 @@ import org.zalando.problem.spring.web.advice.ProblemHandling;
  * @since 1.17
  */
 @ControllerAdvice
-@Slf4j
 public class ExceptionAdvice implements ConstraintViolationExceptionTrait, ProblemHandling {
 }

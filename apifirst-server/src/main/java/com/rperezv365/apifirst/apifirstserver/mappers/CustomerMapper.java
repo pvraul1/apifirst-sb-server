@@ -21,8 +21,6 @@ public interface CustomerMapper {
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     void patchCustomer(CustomerPatchDto customerPatchDto, @MappingTarget Customer target);
 
-    CustomerDto customerToDto(Customer customer);
-
     CustomerDto customerToCustomerDto(Customer customer);
 
     @Mapping(target = "dateCreated", ignore = true)

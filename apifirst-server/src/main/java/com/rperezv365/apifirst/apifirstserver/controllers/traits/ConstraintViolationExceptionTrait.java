@@ -20,7 +20,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 public interface ConstraintViolationExceptionTrait extends AdviceTrait {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleDataIntegrityViolationException(final DataIntegrityViolationException e,
+    default ResponseEntity<Problem> handleDataIntegrityViolation(final DataIntegrityViolationException e,
                                                                           final NativeWebRequest request) {
         return create(Status.CONFLICT, e, request);
     }
